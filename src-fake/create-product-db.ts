@@ -6,7 +6,12 @@ import { ImageProcessor } from './image-processor';
 import { getId } from './lib/get-id';
 import { isUrl } from './lib/is-url';
 import { products } from './products';
-import { DbProduct, GenerateImageOption, Product, ProductImageInfo } from './type';
+import {
+  DbProduct,
+  GenerateImageOption,
+  Product,
+  ProductImageInfo,
+} from './type';
 
 function getRandomInteger(max: number) {
   return faker.random.number({
@@ -40,7 +45,10 @@ function createFakeProduct(): Product {
   return {
     id: getId(),
     name: faker.commerce.productName(),
-    descriptions: [faker.commerce.productAdjective(), faker.commerce.productAdjective()],
+    descriptions: [
+      faker.commerce.productAdjective(),
+      faker.commerce.productAdjective(),
+    ],
     image: getProductImage(),
     department: faker.commerce.department(),
     price: faker.commerce.price(),
@@ -57,16 +65,25 @@ function createFakeProducts(count: number) {
   return products;
 }
 
-function associateRelatedProducts(product: Product, _: any, products: Product[]) {
+function associateRelatedProducts(
+  product: Product,
+  _: any,
+  products: Product[]
+) {
   const productsInSameDepartment = products.filter(
     p => p.department === product.department && p !== product
   );
   const relatedProducts = Array.from(
     { length: getRandomInteger(Math.min(productsInSameDepartment.length, 5)) },
-    () => productsInSameDepartment[getRandomInteger(productsInSameDepartment.length - 1)].id
+    () =>
+      productsInSameDepartment[
+        getRandomInteger(productsInSameDepartment.length - 1)
+      ].id
   );
   return Object.assign({}, product, {
-    related: relatedProducts.filter((p, index, array) => array.indexOf(p) === index),
+    related: relatedProducts.filter(
+      (p, index, array) => array.indexOf(p) === index
+    ),
   });
 }
 
@@ -135,7 +152,7 @@ export function createProductDb(imageProcessor: ImageProcessor): DbProduct[] {
   const allProducts = products
     .concat(createFakeProducts(numOfProducts))
     .map(associateRelatedProducts);
-  console.info('Created all products.');
+  console.info(`Created all ${allProducts.length} products.`);
 
   const result: DbProduct[] = [];
   for (const product of allProducts) {
@@ -143,9 +160,9 @@ export function createProductDb(imageProcessor: ImageProcessor): DbProduct[] {
       const imageData = getProductImageData(product);
       const imageInfo: ProductImageInfo = {};
       imageData.options.forEach(option => {
-        const imageFileName = `${_.kebabCase(product.name)}.${option.blur ? 'blur' : 'ori'}.${
-          option.height
-        }x${option.width}.${option.format}`;
+        const imageFileName = `${_.kebabCase(product.name)}.${
+          option.blur ? 'blur' : 'ori'
+        }.${option.height}x${option.width}.${option.format}`;
 
         imageProcessor.addImage({
           imagePath: imageData.imagePath,

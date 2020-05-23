@@ -16,3 +16,14 @@ const app_baseurl = APP_NAME
   ? `https://${APP_NAME}.herokuapp.com/static`
   : `http://localhost:${PORT}/static`;
 export const imagePublicPath = `${app_baseurl}/images/`;
+
+Object.entries({
+  isDev,
+  outputFolder,
+  publicPath,
+  publicSrcPath,
+  imageOutputFolder,
+  numOfUsers,
+  numOfProducts,
+  imagePublicPath,
+}).forEach(([key, value]) => console.info(`${key}: ${value}`));
