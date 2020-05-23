@@ -46,6 +46,7 @@
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
     "rxjs": "^6.5.4",
+    "superagent": "^5.2.2",
     "swagger-ui-express": "^4.1.4",
     "utf-8-validate": "^5.0.2",
     "ws": "^7.3.0"
