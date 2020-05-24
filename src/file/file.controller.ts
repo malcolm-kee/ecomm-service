@@ -5,10 +5,17 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { ApiTags, ApiBody, ApiOperation, ApiConsumes } from '@nestjs/swagger';
+import {
+  ApiBody,
+  ApiConsumes,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
+import { PUBLIC_PATH } from '../constants';
+import { UploadFileResponse } from './file.dto';
 import { FileService } from './file.service';
 import { UploadFileInfo, UPLOAD_FOLDER } from './file.type';
-import { PUBLIC_PATH } from '../constants';
 
 @ApiTags('file')
 @Controller('file')
@@ -31,6 +38,10 @@ export class FileController {
         },
       },
     },
+  })
+  @ApiResponse({
+    status: 201,
+    type: UploadFileResponse,
   })
   @Post('upload')
   @UseInterceptors(
