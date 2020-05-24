@@ -1,4 +1,5 @@
 const agent = require('superagent');
+const { seedMarketing } = require('./seed-marketing');
 const { seedProducts } = require('./seed-products');
 const { seedJobs } = require('./seed-jobs');
 const { baseUrl } = require('./constants');
@@ -38,5 +39,5 @@ const tryUntil = (callback, { timeout = 3000, retries = 3 } = {}) =>
     })
   );
 
-  await Promise.all([seedProducts(), seedJobs()]);
+  await Promise.all([seedProducts(), seedJobs(), seedMarketing()]);
 })();

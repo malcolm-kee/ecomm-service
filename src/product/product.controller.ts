@@ -96,8 +96,18 @@ export class ProductController {
     type: ProductResponse,
     description: 'Product is deleted successfully',
   })
+  @ApiResponse({
+    status: 404,
+    description: 'No product found with the specified id',
+  })
   @Delete(':id')
-  deleteProduct(@Param('id') id: string) {
-    return this.productService.deleteOne(id);
+  async deleteProduct(@Param('id') id: string) {
+    const deletedProduct = this.productService.deleteOne(id);
+
+    if (!deletedProduct) {
+      throw new NotFoundException();
+    }
+
+    return deletedProduct;
   }
 }
