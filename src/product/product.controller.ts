@@ -3,14 +3,18 @@ import {
   Controller,
   Delete,
   Get,
+  NotFoundException,
   Param,
   Post,
-  Query,
   Put,
-  NotFoundException,
+  Query,
 } from '@nestjs/common';
-import { ApiOperation, ApiQuery } from '@nestjs/swagger';
-import { CreateProductDto, UpdateProductDto } from './product.dto';
+import { ApiOperation, ApiQuery, ApiResponse } from '@nestjs/swagger';
+import {
+  CreateProductDto,
+  ProductResponse,
+  UpdateProductDto,
+} from './product.dto';
 import { ProductService } from './product.service';
 
 @Controller('product')
@@ -24,15 +28,33 @@ export class ProductController {
     name: 'before',
     required: false,
   })
+  @ApiQuery({
+    name: 'limit',
+    required: false,
+    type: 'number',
+  })
+  @ApiResponse({
+    status: 200,
+    type: ProductResponse,
+    isArray: true,
+  })
   @Get()
-  getProducts(@Query('before') before?: string) {
+  getProducts(
+    @Query('before') before?: string,
+    @Query('limit') limit?: number
+  ) {
     return this.productService.getMany({
       before,
+      limit,
     });
   }
 
   @ApiOperation({
     description: 'Create a product',
+  })
+  @ApiResponse({
+    status: 201,
+    type: ProductResponse,
   })
   @Post()
   createProduct(@Body() body: CreateProductDto) {
@@ -41,6 +63,15 @@ export class ProductController {
 
   @ApiOperation({
     description: 'Update a product',
+  })
+  @ApiResponse({
+    status: 200,
+    type: ProductResponse,
+    description: 'Product is updated successfully',
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'No product found with the specified id',
   })
   @Put(':id')
   async updateProduct(
@@ -58,6 +89,11 @@ export class ProductController {
 
   @ApiOperation({
     description: 'Delete a product',
+  })
+  @ApiResponse({
+    status: 200,
+    type: ProductResponse,
+    description: 'Product is deleted successfully',
   })
   @Delete(':id')
   deleteProduct(@Param('id') id: string) {

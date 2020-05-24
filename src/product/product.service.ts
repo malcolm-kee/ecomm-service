@@ -29,16 +29,25 @@ export class ProductService {
     limit = 10,
   }: {
     before?: string;
-    limit?: number;
+    limit?: number | string;
   } = {}) {
     return this.productModel
-      .find({
-        createdOn: {
-          $lte: before,
-        },
-      })
-      .limit(limit)
-      .sort('-createdOn')
+      .find(
+        before
+          ? {
+              createdAt: {
+                $lt: before,
+              },
+            }
+          : {},
+        {},
+        {
+          sort: {
+            createdAt: -1,
+          },
+          limit: Number(limit),
+        }
+      )
       .exec();
   }
 
