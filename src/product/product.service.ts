@@ -1,7 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { ProductDocument, PRODUCT_SCHEMA, Product } from './product.type';
+import {
+  ProductDocument,
+  PRODUCT_SCHEMA,
+  Product,
+  ProductComment,
+} from './product.type';
 
 @Injectable()
 export class ProductService {
@@ -21,6 +26,20 @@ export class ProductService {
   updateOne(id: string, changes: Partial<Product>) {
     return this.productModel
       .findByIdAndUpdate(id, changes, { new: true })
+      .exec();
+  }
+
+  addComment(id: string, comment: ProductComment) {
+    return this.productModel
+      .findByIdAndUpdate(
+        id,
+        {
+          $push: {
+            comments: comment,
+          },
+        },
+        { new: true }
+      )
       .exec();
   }
 

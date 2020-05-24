@@ -9,6 +9,12 @@ export type ProductImages = {
   thumbBlur: string;
 };
 
+export type ProductComment = {
+  userName: string;
+  content: string;
+  rating: number;
+};
+
 export type Product = {
   name: string;
   descriptions: string[];
@@ -17,6 +23,7 @@ export type Product = {
   price: string;
   related: string[];
   images: ProductImages | null;
+  comments: ProductComment[];
 };
 
 export type ProductDocument = Product & Document;

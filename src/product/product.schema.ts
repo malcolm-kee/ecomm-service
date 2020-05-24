@@ -17,8 +17,18 @@ export const ProductSchema = new Schema<Product>(
       blur: String,
       thumbBlur: String,
     },
+    comments: [
+      {
+        userName: String,
+        content: String,
+        rating: {
+          type: Number,
+          required: true,
+        },
+      },
+    ],
   },
   {
     timestamps: true,
-  },
+  }
 );

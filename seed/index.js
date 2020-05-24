@@ -1,10 +1,12 @@
 const agent = require('superagent');
+const { baseUrl } = require('./constants');
+const { seedComments } = require('./seed-comments');
+const { seedJobs } = require('./seed-jobs');
 const { seedMarketing } = require('./seed-marketing');
 const { seedProducts } = require('./seed-products');
-const { seedJobs } = require('./seed-jobs');
-const { baseUrl } = require('./constants');
+const { seedUsers } = require('./seed-users');
 
-const tryUntil = (callback, { timeout = 3000, retries = 3 } = {}) =>
+const waitUntil = (callback, { timeout = 3000, retries = 3 } = {}) =>
   new Promise((fulfill, reject) => {
     let retryCount = 0;
 
@@ -31,7 +33,7 @@ const tryUntil = (callback, { timeout = 3000, retries = 3 } = {}) =>
   });
 
 (async function seedData() {
-  await tryUntil(() =>
+  await waitUntil(() =>
     agent.get(`${baseUrl}/api`).then(res => {
       if (!res.ok) {
         throw new Error(`Response not ok`);
@@ -39,5 +41,12 @@ const tryUntil = (callback, { timeout = 3000, retries = 3 } = {}) =>
     })
   );
 
-  await Promise.all([seedProducts(), seedJobs(), seedMarketing()]);
+  const [productIdMap] = await Promise.all([
+    seedProducts(),
+    seedUsers(),
+    seedJobs(),
+    seedMarketing(),
+  ]);
+
+  await seedComments(productIdMap);
 })();

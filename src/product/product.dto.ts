@@ -1,6 +1,12 @@
 import { ApiProperty, PartialType } from '@nestjs/swagger';
 import { IsMongoId, IsNotEmpty, IsString } from 'class-validator';
-import { Product, ProductImages } from './product.type';
+import { Product, ProductImages, ProductComment } from './product.type';
+
+export class ProductCommentDto implements ProductComment {
+  userName: string;
+  content: string;
+  rating: number;
+}
 
 export class CreateProductDto implements Product {
   @ApiProperty({
@@ -29,6 +35,8 @@ export class CreateProductDto implements Product {
   related: string[];
 
   images: ProductImages;
+
+  comments: ProductCommentDto[];
 }
 
 export class UpdateProductDto extends PartialType(CreateProductDto) {}

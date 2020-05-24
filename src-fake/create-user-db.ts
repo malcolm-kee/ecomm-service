@@ -11,6 +11,7 @@ function createUserProfile(): User {
     email: faker.internet.email(firstName, lastName),
     joinedDate: faker.date.past().getTime(),
     avatar: faker.image.avatar(),
+    password: faker.internet.password(10),
   };
 }
 

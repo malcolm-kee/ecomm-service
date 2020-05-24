@@ -14,6 +14,7 @@ import {
   CreateProductDto,
   ProductResponse,
   UpdateProductDto,
+  ProductCommentDto,
 } from './product.dto';
 import { ProductService } from './product.service';
 
@@ -80,6 +81,32 @@ export class ProductController {
     @Body() changes: UpdateProductDto
   ) {
     const updated = await this.productService.updateOne(id, changes);
+
+    if (!updated) {
+      throw new NotFoundException();
+    }
+
+    return updated;
+  }
+
+  @ApiOperation({
+    summary: 'Add comment to a product',
+  })
+  @ApiResponse({
+    status: 201,
+    type: ProductResponse,
+    description: 'Comment is added successfully',
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'No product found with the specified id',
+  })
+  @Post('comment/:id')
+  async addProductComment(
+    @Param('id') id: string,
+    @Body() comment: ProductCommentDto
+  ) {
+    const updated = await this.productService.addComment(id, comment);
 
     if (!updated) {
       throw new NotFoundException();

@@ -32,15 +32,16 @@ export interface User {
   email: string;
   joinedDate: number;
   avatar: string;
+  password: string;
 }
 
 export interface Comment {
-  id: number;
   productId: number;
   userId: number;
   userName: string;
   content: string;
   createdOn: number;
+  rating: number;
 }
 
 export interface GenerateImageOption {
