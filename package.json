@@ -43,6 +43,7 @@
     "imagemin-pngquant": "^8.0.0",
     "imagemin-webp": "^5.1.0",
     "lodash": "^4.17.15",
+    "mime-db": "^1.44.0",
     "mongodb-memory-server": "^6.6.1",
     "mongoose": "^5.9.15",
     "reflect-metadata": "^0.1.13",

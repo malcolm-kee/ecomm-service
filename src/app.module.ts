@@ -4,6 +4,8 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { MongoMemoryServer } from 'mongodb-memory-server';
 import * as path from 'path';
+import { PUBLIC_PATH } from './constants';
+import { FileModule } from './file/file.module';
 import { JobModule } from './job/job.module';
 import { MarketingModule } from './marketing/marketing.module';
 import { ProductModule } from './product/product.module';
@@ -14,7 +16,7 @@ import { ProductModule } from './product/product.module';
       isGlobal: true,
     }),
     ServeStaticModule.forRoot({
-      rootPath: path.join(__dirname, '..', 'build', 'public'),
+      rootPath: path.join(__dirname, '..', PUBLIC_PATH),
     }),
     MongooseModule.forRootAsync({
       useFactory: async () => {
@@ -27,6 +29,7 @@ import { ProductModule } from './product/product.module';
     ProductModule,
     JobModule,
     MarketingModule,
+    FileModule,
   ],
 })
 export class AppModule {}

@@ -23,7 +23,7 @@ export class ProductController {
   constructor(private readonly productService: ProductService) {}
 
   @ApiOperation({
-    description: 'Get list of available products',
+    summary: 'Get list of available products',
   })
   @ApiQuery({
     name: 'before',
@@ -51,7 +51,7 @@ export class ProductController {
   }
 
   @ApiOperation({
-    description: 'Create a product',
+    summary: 'Create a product',
   })
   @ApiResponse({
     status: 201,
@@ -63,7 +63,7 @@ export class ProductController {
   }
 
   @ApiOperation({
-    description: 'Update a product',
+    summary: 'Update a product',
   })
   @ApiResponse({
     status: 200,
@@ -89,7 +89,7 @@ export class ProductController {
   }
 
   @ApiOperation({
-    description: 'Delete a product',
+    summary: 'Delete a product',
   })
   @ApiResponse({
     status: 200,
