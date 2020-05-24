@@ -4,6 +4,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { MongoMemoryServer } from 'mongodb-memory-server';
 import * as path from 'path';
+import { JobModule } from './job/job.module';
 import { ProductModule } from './product/product.module';
 
 @Module({
@@ -23,6 +24,7 @@ import { ProductModule } from './product/product.module';
       },
     }),
     ProductModule,
+    JobModule,
   ],
 })
 export class AppModule {}

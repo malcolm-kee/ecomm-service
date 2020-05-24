@@ -20,7 +20,14 @@ module.exports = {
     rules: [
       {
         test: /(.js|.ts)$/,
-        use: 'ts-loader',
+        use: [
+          {
+            loader: 'ts-loader',
+            options: {
+              configFile: path.resolve(__dirname, 'src-fake', 'tsconfig.json'),
+            },
+          },
+        ],
       },
     ],
   },

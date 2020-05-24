@@ -7,11 +7,12 @@ exports.seedProducts = async function seedProducts() {
   try {
     const idMap = new Map();
 
-    for (const product of data.products) {
+    const products = data.products.slice().reverse();
+
+    for (const product of products) {
       const res = await agent
         .post(`${baseUrl}/product`)
-        .set('Content-Type', 'application/json')
-        .set('Accept', 'application/json')
+        .type('json')
         .send(
           _.assign(_.omit(product, ['id', 'related']), {
             related: [],
@@ -28,12 +29,13 @@ exports.seedProducts = async function seedProducts() {
 
       await agent
         .put(`${baseUrl}/product/${productId}`)
-        .set('Content-Type', 'application/json')
-        .set('Accept', 'application/json')
+        .type('json')
         .send({
           related: relatedProductsId,
         });
     }
+
+    return idMap;
   } catch (err) {
     console.error(err);
   }

@@ -1,5 +1,6 @@
 import fs from 'fs';
 import mkdirp from 'mkdirp';
+import markdownIt from 'markdown-it';
 import path from 'path';
 import rimraf from 'rimraf';
 import {
@@ -15,6 +16,8 @@ import { ImageProcessor } from './image-processor';
 import jobPostings from './jobs.json';
 import { processBannerImages } from './process-banner-images';
 import { DbBanner, DbComment, DbProduct, DbUser, JobPosting } from './type';
+
+const fsys = fs.promises;
 
 function clean() {
   return new Promise(function(fulfill, reject) {
@@ -38,7 +41,7 @@ async function setupPublicFolder() {
   await mkdirp(imageOutputFolder);
 }
 
-function buildDb({
+async function buildDb({
   products,
   banners,
   users,
@@ -51,30 +54,56 @@ function buildDb({
   comments: DbComment[];
   jobs: JobPosting[];
 }) {
-  return new Promise(function(fulfill, reject) {
-    fs.writeFile(
-      path.resolve(outputFolder, 'db.json'),
-      JSON.stringify({
-        banners,
-        comments,
-        users,
-        products,
-        jobs,
-        chats: [],
-      }),
-      'utf8',
-      function afterBuildDb(err) {
-        if (err) {
-          console.error('Error build db');
-          console.error(err);
-          return reject(err);
-        }
+  return fsys.writeFile(
+    path.resolve(outputFolder, 'db.json'),
+    JSON.stringify({
+      banners,
+      comments,
+      users,
+      products,
+      jobs,
+      chats: [],
+    }),
+    'utf8'
+  );
+}
 
-        console.log('Success build db');
-        fulfill();
-      }
-    );
-  });
+async function generateHomePage() {
+  const fileContent = await fsys.readFile(
+    path.resolve(__dirname, '..', 'README.md'),
+    {
+      encoding: 'utf-8',
+    }
+  );
+
+  const parsedMd = markdownIt({
+    html: true,
+  }).render(fileContent);
+
+  await fsys.writeFile(
+    path.resolve(publicPath, 'index.html'),
+    `<!DOCTYPE html>
+  <html>
+    <head>
+      <title>ecomm-service</title>
+      <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/4.0.0/github-markdown.min.css" ></link>
+      <style>
+        .markdown-body {
+          max-width: 70ch;
+          margin: 0 auto;
+        }
+      </style>
+    </head>
+    <body>
+      <div class="markdown-body">
+      ${parsedMd}
+      </div>
+    </body>
+  </html>`,
+    {
+      encoding: 'utf-8',
+    }
+  );
 }
 
 async function build() {
@@ -87,6 +116,7 @@ async function build() {
       createProductDb(imageProcessor),
       createUserDb(numOfUsers),
       processBannerImages(imageProcessor),
+      generateHomePage(),
     ]);
     const comments = createCommentDb(products, users);
 
