@@ -1,5 +1,12 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsEmail, IsNotEmpty, IsString, MinLength } from 'class-validator';
+import {
+  IsEmail,
+  IsNotEmpty,
+  IsString,
+  IsUrl,
+  MinLength,
+  ValidateIf,
+} from 'class-validator';
 import { JwtPayload } from '../auth';
 
 export class RegisterDto {
@@ -25,10 +32,12 @@ export class RegisterDto {
   })
   password: string;
 
-  @IsString()
   @ApiProperty({
     example: 'http://github.com/malcolm-kee.png',
   })
+  @IsString()
+  @ValidateIf(dto => dto.avatar !== '')
+  @IsUrl()
   avatar: string;
 }
 
@@ -37,11 +46,15 @@ export class LoginDto {
     description: 'Email used during registration',
     example: 'malcolm@gmail.com',
   })
+  @IsString()
+  @IsNotEmpty()
   username: string;
 
   @ApiProperty({
     example: '12345678',
   })
+  @IsString()
+  @IsNotEmpty()
   password: string;
 }
 
