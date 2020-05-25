@@ -3,20 +3,16 @@ import {
   OnGatewayConnection,
   OnGatewayDisconnect,
   WebSocketGateway,
-  WebSocketServer,
 } from '@nestjs/websockets';
 import { IncomingMessage } from 'http';
 import * as url from 'url';
-import WebSocket, { Server } from 'ws';
-import { MessagePayload, ChatMessage } from './chat.type';
+import WebSocket from 'ws';
 import { ChatService } from './chat.service';
+import { ChatMessage, MessagePayload } from './chat.type';
 
 @WebSocketGateway()
 @Injectable()
 export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
-  @WebSocketServer()
-  server: Server;
-
   constructor(private readonly chatService: ChatService) {}
 
   private roomParticipants = new Map<string, WebSocket[]>();
