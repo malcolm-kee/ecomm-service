@@ -4,6 +4,7 @@ const data = require('../build/db.json');
 const { baseUrl } = require('./constants');
 
 exports.seedProducts = async function seedProducts() {
+  console.log('Seeding products...');
   try {
     const idMap = new Map();
 
@@ -34,6 +35,7 @@ exports.seedProducts = async function seedProducts() {
           related: relatedProductsId,
         });
     }
+    console.log('Done seeding products.');
 
     return idMap;
   } catch (err) {

@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsString, IsIn } from 'class-validator';
+import { IsIn, IsString } from 'class-validator';
+import { DocumentDto } from '../constants';
 import { Job, JobLevel, JobLevelEnum } from './job.type';
 
 export class JobDto implements Job {
@@ -34,9 +35,12 @@ export class JobDto implements Job {
   requirements: string[];
 }
 
-export class JobResponse extends JobDto {
+export class JobResponse extends JobDto implements DocumentDto {
   @ApiProperty({
     description: 'Unique id for the job',
   })
   _id: string;
+  __v: number;
+  createdAt: string;
+  updatedAt: string;
 }

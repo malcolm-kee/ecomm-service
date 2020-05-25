@@ -1,19 +1,28 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { ChatService } from 'chat/chat.service';
 import { omit } from 'lodash';
-import { User, UserDocument, USER_SCHEMA_NAME } from './user.type';
+import { Model } from 'mongoose';
+import {
+  User,
+  UserDocument,
+  UserPublicDetails,
+  USER_SCHEMA_NAME,
+} from './user.type';
 
 @Injectable()
 export class UserService {
   constructor(
     @InjectModel(USER_SCHEMA_NAME)
-    private readonly userModel: Model<UserDocument>
+    private readonly userModel: Model<UserDocument>,
+    private readonly chatService: ChatService
   ) {}
 
   async create(userData: User) {
     const user = new this.userModel(userData);
-    await user.save();
+    const savedUser = await user.save();
+
+    await this.chatService.addParticipantToGlobalRoom(savedUser._id);
 
     return omit(userData, ['password']);
   }
@@ -24,5 +33,16 @@ export class UserService {
         email,
       })
       .exec();
+  }
+
+  async getPublicDetails(id: string): Promise<UserPublicDetails> {
+    const user = await this.userModel.findById(id).exec();
+    return (
+      user && {
+        _id: user._id,
+        name: user.name,
+        avatar: user.avatar,
+      }
+    );
   }
 }

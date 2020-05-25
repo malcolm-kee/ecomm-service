@@ -9,4 +9,6 @@ export type User = {
   avatar: string;
 };
 
+export type UserPublicDetails = Pick<User, 'name' | 'avatar'> & { _id: string };
+
 export type UserDocument = User & Document;

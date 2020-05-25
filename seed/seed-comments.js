@@ -3,6 +3,7 @@ const data = require('../build/db.json');
 const { baseUrl } = require('./constants');
 
 exports.seedComments = async function seedComments(productIdMap) {
+  console.log('Seeding comments...');
   try {
     for (const comment of data.comments) {
       const productId = productIdMap.get(comment.productId);
@@ -20,4 +21,5 @@ exports.seedComments = async function seedComments(productIdMap) {
   } catch (err) {
     console.error(err);
   }
+  console.log('Done seeding comments.');
 };

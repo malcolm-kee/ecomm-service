@@ -5,6 +5,7 @@ import { ServeStaticModule } from '@nestjs/serve-static';
 import { MongoMemoryServer } from 'mongodb-memory-server';
 import * as path from 'path';
 import { AuthModule } from './auth/auth.module';
+import { ChatModule } from './chat/chat.module';
 import { PUBLIC_PATH } from './constants';
 import { CustomerModule } from './customer/customer.module';
 import { FileModule } from './file/file.module';
@@ -34,6 +35,7 @@ import { ProductModule } from './product/product.module';
     FileModule,
     AuthModule,
     CustomerModule,
+    ChatModule,
   ],
 })
 export class AppModule {}

@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
+import { ChatModule } from 'chat/chat.module';
 import { UserSchema } from './user.schema';
 import { UserService } from './user.service';
 import { USER_SCHEMA_NAME } from './user.type';
@@ -12,6 +13,7 @@ import { USER_SCHEMA_NAME } from './user.type';
         schema: UserSchema,
       },
     ]),
+    ChatModule,
   ],
   providers: [UserService],
   exports: [UserService],

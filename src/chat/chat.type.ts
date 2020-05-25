@@ -1,0 +1,22 @@
+import { Document } from 'mongoose';
+
+export type ChatMessage = {
+  content: string;
+  senderId: string;
+};
+
+export type ChatMessageDoc = ChatMessage & Document;
+
+export const ChatRoomTypes = ['global', '1-to-1', 'group'] as const;
+
+export type ChatRoomType = typeof ChatRoomTypes[number];
+
+export type ChatRoom = {
+  roomType: ChatRoomType;
+  messages: ChatMessage[];
+  participantUserIds: string[];
+};
+
+export type ChatRoomDocument = ChatRoom & Document;
+
+export const CHATROOM_SCHEMA = 'ChatRoom';
