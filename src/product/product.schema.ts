@@ -1,10 +1,24 @@
 import { Schema } from 'mongoose';
-import { Product } from './product.type';
+import { Product, ProductComment } from './product.type';
+
+export const ProductCommentSchema = new Schema<ProductComment>(
+  {
+    userName: String,
+    content: String,
+    rating: {
+      type: Number,
+      required: true,
+    },
+  },
+  {
+    timestamps: true,
+  }
+);
 
 export const ProductSchema = new Schema<Product>(
   {
     name: String,
-    description: [String],
+    descriptions: [String],
     image: String,
     department: String,
     price: String,
@@ -17,16 +31,7 @@ export const ProductSchema = new Schema<Product>(
       blur: String,
       thumbBlur: String,
     },
-    comments: [
-      {
-        userName: String,
-        content: String,
-        rating: {
-          type: Number,
-          required: true,
-        },
-      },
-    ],
+    comments: [ProductCommentSchema],
   },
   {
     timestamps: true,

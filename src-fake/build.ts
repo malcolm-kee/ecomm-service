@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 import fs from 'fs';
 import mkdirp from 'mkdirp';
 import markdownIt from 'markdown-it';
