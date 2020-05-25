@@ -20,3 +20,14 @@ export type ChatRoom = {
 export type ChatRoomDocument = ChatRoom & Document;
 
 export const CHATROOM_SCHEMA = 'ChatRoom';
+
+export type MessagePayload =
+  | {
+      type: 'System';
+      message: string;
+    }
+  | {
+      type: 'User';
+      message: string;
+      data: ChatMessage;
+    };
