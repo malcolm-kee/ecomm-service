@@ -1,3 +1,4 @@
+require('dotenv').config();
 const agent = require('superagent');
 const { baseUrl } = require('./constants');
 const { createUsers } = require('./create-users');
