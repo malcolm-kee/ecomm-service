@@ -23,7 +23,6 @@ export function createCommentDb(products: Product[], users: User[]): Comment[] {
         const user = pickUser(users);
         comments.push({
           productId: product.id,
-          userId: user.id,
           userName: user.name,
           content: faker.lorem.sentence(),
           createdOn: faker.date.past().getTime(),

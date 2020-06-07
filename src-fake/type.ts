@@ -1,4 +1,5 @@
 import { Sharp } from 'sharp';
+import { Types } from 'mongoose';
 
 export interface ImageData {
   sharp: Sharp;
@@ -27,7 +28,7 @@ export interface ProcessedProduct extends Product {
 }
 
 export interface User {
-  id: number;
+  id: Types.ObjectId;
   name: string;
   email: string;
   joinedDate: number;
@@ -37,7 +38,6 @@ export interface User {
 
 export interface Comment {
   productId: number;
-  userId: number;
   userName: string;
   content: string;
   createdOn: number;
