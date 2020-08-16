@@ -28,11 +28,13 @@ export class ChatService {
   ) {}
 
   createRoom(room: ChatRoom) {
-    return this.chatRoomSchema.create(room).then(r => this.populateUser(r));
+    return this.chatRoomSchema.create(room).then((r) => this.populateUser(r));
   }
 
   getOneRoom(roomId: string) {
-    return this.chatRoomSchema.findById(roomId).then(r => this.populateUser(r));
+    return this.chatRoomSchema
+      .findById(roomId)
+      .then((r) => this.populateUser(r));
   }
 
   getGlobalRoom() {
@@ -40,7 +42,7 @@ export class ChatService {
       .findOne({
         roomType: 'global',
       })
-      .then(r => this.populateUser(r));
+      .then((r) => this.populateUser(r));
   }
 
   getRoomsForUser(userId: string) {
@@ -56,7 +58,7 @@ export class ChatService {
           },
         }
       )
-      .then(rooms =>
+      .then((rooms) =>
         rooms.map((room: ChatRoomDocument & DocumentDto) => ({
           _id: room._id,
           roomType: room.roomType,
@@ -76,7 +78,7 @@ export class ChatService {
     return {
       ...room.toJSON(),
       participants: await Promise.all(
-        room.participantUserIds.map(userId =>
+        room.participantUserIds.map((userId) =>
           this.userService.getPublicDetails(userId)
         )
       ),
@@ -130,7 +132,7 @@ export class ChatService {
           new: true,
         }
       )
-      .then(r => r && r.messages[r.messages.length - 1]);
+      .then((r) => r && r.messages[r.messages.length - 1]);
   }
 
   async updateMessage(roomId: string, msg: ChatMessage & { id: string }) {

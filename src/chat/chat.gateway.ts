@@ -38,7 +38,7 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
       });
     }
 
-    client.on('message', async rawData => {
+    client.on('message', async (rawData) => {
       const message = this.parseMsg(rawData);
       if (message) {
         const savedMessage = await this.chatService.addMessage(roomId, message);
@@ -71,7 +71,7 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
       if (roomId) {
         if (Array.isArray(roomId)) {
-          roomId.forEach(id => this.registerClient(id, client));
+          roomId.forEach((id) => this.registerClient(id, client));
         } else {
           this.registerClient(roomId, client);
         }
@@ -86,7 +86,7 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
   private sendMessage(client: WebSocket, message: MessagePayload) {
     const payload = JSON.stringify(message);
     return new Promise((fulfill, reject) => {
-      client.send(payload, err => {
+      client.send(payload, (err) => {
         if (err) {
           return reject(err);
         }
@@ -100,7 +100,9 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
     if (participants) {
       return Promise.all(
-        participants.map(participant => this.sendMessage(participant, message))
+        participants.map((participant) =>
+          this.sendMessage(participant, message)
+        )
       );
     }
     return Promise.resolve();

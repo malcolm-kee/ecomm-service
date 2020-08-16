@@ -36,7 +36,7 @@ export class RegisterDto {
     example: 'http://github.com/malcolm-kee.png',
   })
   @IsString()
-  @ValidateIf(dto => dto.avatar !== '')
+  @ValidateIf((dto) => dto.avatar !== '')
   @IsUrl()
   avatar: string;
 }

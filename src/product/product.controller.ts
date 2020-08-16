@@ -52,11 +52,11 @@ export class ProductController {
   }
 
   @ApiOperation({
-    summary: 'Get details of one product'
+    summary: 'Get details of one product',
   })
   @ApiResponse({
     status: 200,
-    type: ProductResponse
+    type: ProductResponse,
   })
   @Get(':id')
   getOneProduct(@Param('id') id: string) {
