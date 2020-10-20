@@ -22,7 +22,7 @@ async function bootstrap() {
   app.useWebSocketAdapter(new WsAdapter(app));
 
   const document = SwaggerModule.createDocument(app, options);
-  SwaggerModule.setup('api', app, document);
+  SwaggerModule.setup('docs', app, document);
 
   const PORT = app.get(ConfigService).get<string>('PORT') || 3000;
 

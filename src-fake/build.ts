@@ -1,5 +1,6 @@
 require('dotenv').config();
 
+import { once } from 'events';
 import fs from 'fs';
 import mkdirp from 'mkdirp';
 import markdownIt from 'markdown-it';
@@ -14,15 +15,16 @@ import {
 import { createCommentDb } from './create-comment-db';
 import { createProductDb } from './create-product-db';
 import { createUserDb } from './create-user-db';
-import { ImageProcessor } from './image-processor';
+import { encodeImageToBlurHash, ImageProcessor } from './image-processor';
 import jobPostings from './jobs.json';
 import { processBannerImages } from './process-banner-images';
 import { DbBanner, DbComment, DbProduct, DbUser, JobPosting } from './type';
+import { omit } from 'lodash';
 
 const fsys = fs.promises;
 
 function clean() {
-  return new Promise(function(fulfill, reject) {
+  return new Promise(function (fulfill, reject) {
     rimraf(outputFolder, function afterRimraf(rimrafErr) {
       if (rimrafErr) {
         console.error('rimraf error');
@@ -30,7 +32,7 @@ function clean() {
       }
       mkdirp(outputFolder)
         .then(fulfill)
-        .catch(mkdirErr => {
+        .catch((mkdirErr) => {
           console.error('create build folder error');
           reject(mkdirErr);
         });
@@ -122,21 +124,38 @@ async function build() {
     ]);
     const comments = createCommentDb(products, users);
 
+    if (!imageProcessor.isEmpty) {
+      console.log(`Waiting image generations...`);
+      imageProcessor.logProgress();
+      await once(imageProcessor, 'done');
+      console.log(`Image generation done`);
+    }
+
+    const finalProducts = await Promise.all(
+      products.map(async (p) => {
+        const blurhash =
+          p.smallImagePath && (await encodeImageToBlurHash(p.smallImagePath));
+        return {
+          blurhash,
+          id: p.id,
+          name: p.name,
+          descriptions: p.descriptions,
+          department: p.department,
+          price: p.price,
+          image: p.image,
+          related: p.related,
+          images: p.images,
+        };
+      })
+    );
+
     await buildDb({
       banners,
-      products,
+      products: finalProducts,
       users,
       comments,
       jobs: jobPostings as JobPosting[],
     });
-
-    if (!imageProcessor.isEmpty) {
-      console.log(`Waiting image generations...`);
-      imageProcessor.logProgress();
-      imageProcessor.on('done', () => {
-        console.log(`Image generation done`);
-      });
-    }
   } catch (err) {
     console.error(err);
   }

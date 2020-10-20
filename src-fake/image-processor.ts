@@ -1,4 +1,5 @@
 import { EventEmitter } from 'events';
+import { encode } from 'blurhash';
 import { isFileExist, writeFile } from './lib/fs-helper';
 import { generateImage, getSharp } from './process-image';
 import { GenerateImageOption } from './type';
@@ -61,3 +62,28 @@ export class ImageProcessor extends EventEmitter {
     this.shouldLogProgress = true;
   }
 }
+
+export const encodeImageToBlurHash = (imagePath: string) =>
+  new Promise<string | null>((fulfill) => {
+    getSharp(imagePath).then((sharp) =>
+      sharp
+        .raw()
+        .ensureAlpha()
+        .resize(32, 32, { fit: 'inside' })
+        .toBuffer((err, buffer, dimension) => {
+          if (err) {
+            console.error(err);
+            return fulfill(null);
+          }
+          fulfill(
+            encode(
+              new Uint8ClampedArray(buffer),
+              dimension.width,
+              dimension.height,
+              4,
+              4
+            )
+          );
+        })
+    );
+  });

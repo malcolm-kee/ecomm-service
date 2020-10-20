@@ -75,10 +75,15 @@ export interface JobPosting {
   requirements: string[];
 }
 
-export interface DbProduct extends Product {
+export interface ProductDto extends Product {
   related: number[];
   images: ProductImageInfo | null;
+  smallImagePath: string | null;
 }
+
+export type DbProduct = Omit<ProductDto, 'smallImagePath'> & {
+  blurhash: string;
+};
 export type DbBanner = BannerInfo;
 export type DbUser = User;
 export type DbComment = Comment;

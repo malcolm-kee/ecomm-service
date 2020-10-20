@@ -12,7 +12,7 @@ const waitUntil = (callback, { timeout = 3000, retries = 3 } = {}) =>
   new Promise((fulfill, reject) => {
     let retryCount = 0;
 
-    const retry = error => {
+    const retry = (error) => {
       if (retryCount < retries) {
         retryCount++;
         setTimeout(runCode, timeout);
@@ -23,9 +23,7 @@ const waitUntil = (callback, { timeout = 3000, retries = 3 } = {}) =>
 
     const runCode = () => {
       try {
-        Promise.resolve(callback())
-          .then(fulfill)
-          .catch(retry);
+        Promise.resolve(callback()).then(fulfill).catch(retry);
       } catch (err) {
         retry(err);
       }
@@ -37,7 +35,7 @@ const waitUntil = (callback, { timeout = 3000, retries = 3 } = {}) =>
 (async function seedData() {
   try {
     await waitUntil(() =>
-      agent.get(`${baseUrl}/api`).then(res => {
+      agent.get(`${baseUrl}/docs`).then((res) => {
         if (!res.ok) {
           throw new Error(`Response not ok`);
         }
@@ -64,7 +62,7 @@ const waitUntil = (callback, { timeout = 3000, retries = 3 } = {}) =>
         participantUserIds: [],
         messages: [],
       })
-      .then(res => res.body);
+      .then((res) => res.body);
 
     const anotherUser = {
       name: 'Malcolm',
@@ -84,13 +82,13 @@ const waitUntil = (callback, { timeout = 3000, retries = 3 } = {}) =>
         username: anotherUser.email,
         password: anotherUser.password,
       })
-      .then(res => res.body);
+      .then((res) => res.body);
 
     const result = await agent
       .post(`${baseUrl}/chat/room/${newRoom._id}/join`)
       .type('json')
       .set('Authorization', `Bearer ${newUser.access_token}`)
-      .then(res => res.body);
+      .then((res) => res.body);
 
     console.log({ newRoom, result });
   } catch (fatalError) {

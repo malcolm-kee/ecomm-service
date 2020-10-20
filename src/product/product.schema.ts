@@ -17,12 +17,13 @@ export const ProductCommentSchema = new Schema<ProductComment>(
 
 export const ProductSchema = new Schema<Product>(
   {
-    name: String,
+    name: { type: String, required: true },
     descriptions: [String],
     image: String,
     department: String,
     price: String,
     related: [String],
+    blurhash: String,
     images: {
       standard: String,
       webp: String,

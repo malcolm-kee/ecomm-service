@@ -6,12 +6,7 @@ import { ImageProcessor } from './image-processor';
 import { getId } from './lib/get-id';
 import { isUrl } from './lib/is-url';
 import { products } from './products';
-import {
-  DbProduct,
-  GenerateImageOption,
-  Product,
-  ProductImageInfo,
-} from './type';
+import { Product, ProductDto, ProductImageInfo } from './type';
 
 function getRandomInteger(max: number) {
   return faker.random.number({
@@ -71,7 +66,7 @@ function associateRelatedProducts(
   products: Product[]
 ) {
   const productsInSameDepartment = products.filter(
-    p => p.department === product.department && p !== product
+    (p) => p.department === product.department && p !== product
   );
   const relatedProducts = Array.from(
     { length: getRandomInteger(Math.min(productsInSameDepartment.length, 5)) },
@@ -144,41 +139,49 @@ function getProductImageData(product: Product) {
         format: 'jpg',
         blur: true,
       },
-    ] as Array<GenerateImageOption & { name: string }>,
+    ] as const,
   };
 }
 
-export function createProductDb(imageProcessor: ImageProcessor): DbProduct[] {
+export function createProductDb(imageProcessor: ImageProcessor): ProductDto[] {
   const allProducts = products
     .concat(createFakeProducts(numOfProducts))
     .map(associateRelatedProducts);
   console.info(`Created all ${allProducts.length} products.`);
 
-  const result: DbProduct[] = [];
+  const result: ProductDto[] = [];
   for (const product of allProducts) {
     if (product.image) {
       const imageData = getProductImageData(product);
       const imageInfo: ProductImageInfo = {};
-      imageData.options.forEach(option => {
+      let smallImagePath: string | null = null;
+      imageData.options.forEach((option) => {
         const imageFileName = `${_.kebabCase(product.name)}.${
-          option.blur ? 'blur' : 'ori'
+          'blur' in option ? 'blur' : 'ori'
         }.${option.height}x${option.width}.${option.format}`;
+
+        const outputPath = `${imageOutputFolder}/${imageFileName}`;
 
         imageProcessor.addImage({
           imagePath: imageData.imagePath,
-          outputPath: `${imageOutputFolder}/${imageFileName}`,
+          outputPath,
           option,
         });
         imageInfo[option.name] = `${imagePublicPath}${imageFileName}`;
+        if (option.name === 'thumbStandard') {
+          smallImagePath = outputPath;
+        }
       });
       result.push({
         ...product,
         images: imageInfo,
+        smallImagePath,
       });
     } else {
       result.push({
         ...product,
         images: null,
+        smallImagePath: null,
       });
     }
   }
