@@ -47,7 +47,7 @@
     "imagemin-mozjpeg": "^9.0.0",
     "imagemin-pngquant": "^9.0.1",
     "imagemin-webp": "^6.0.0",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.21",
     "mime-db": "^1.45.0",
     "mongodb-memory-server": "^6.9.2",
     "mongoose": "^5.10.9",
