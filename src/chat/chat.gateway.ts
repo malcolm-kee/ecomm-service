@@ -85,7 +85,7 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
   private sendMessage(client: WebSocket, message: MessagePayload) {
     const payload = JSON.stringify(message);
-    return new Promise((fulfill, reject) => {
+    return new Promise<void>((fulfill, reject) => {
       client.send(payload, (err) => {
         if (err) {
           return reject(err);
