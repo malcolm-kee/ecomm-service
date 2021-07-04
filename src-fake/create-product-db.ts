@@ -9,7 +9,7 @@ import { products } from './products';
 import { Product, ProductDto, ProductImageInfo } from './type';
 
 function getRandomInteger(max: number) {
-  return faker.random.number({
+  return faker.datatype.number({
     max,
     min: 0,
     precision: 1,

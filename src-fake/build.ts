@@ -19,7 +19,6 @@ import { encodeImageToBlurHash, ImageProcessor } from './image-processor';
 import jobPostings from './jobs.json';
 import { processBannerImages } from './process-banner-images';
 import { DbBanner, DbComment, DbProduct, DbUser, JobPosting } from './type';
-import { omit } from 'lodash';
 
 const fsys = fs.promises;
 

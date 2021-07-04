@@ -66,4 +66,5 @@ export class UserProfile implements JwtPayload {
   userId: string;
   name: string;
   email: string;
+  avatar: string;
 }

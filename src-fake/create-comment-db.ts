@@ -2,11 +2,11 @@ import faker from 'faker';
 import { Comment, Product, User } from './type';
 
 function getCommentCount() {
-  return faker.random.number({ min: 0, max: 10 });
+  return faker.datatype.number({ min: 0, max: 10 });
 }
 
 function pickUser(users: User[]) {
-  const userIndex = faker.random.number({
+  const userIndex = faker.datatype.number({
     min: 0,
     max: users.length - 1,
     precision: 1,
@@ -16,7 +16,7 @@ function pickUser(users: User[]) {
 
 export function createCommentDb(products: Product[], users: User[]): Comment[] {
   return products
-    .map(product => {
+    .map((product) => {
       const comments: Comment[] = [];
 
       for (let index = 0; index < getCommentCount(); index++) {
@@ -26,7 +26,7 @@ export function createCommentDb(products: Product[], users: User[]): Comment[] {
           userName: user.name,
           content: faker.lorem.sentence(),
           createdOn: faker.date.past().getTime(),
-          rating: faker.random.number({
+          rating: faker.datatype.number({
             min: 1,
             max: 5,
           }),

@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { ChatService } from 'chat/chat.service';
 import { omit } from 'lodash';
@@ -37,6 +37,7 @@ export class UserService {
 
   async getPublicDetails(id: string): Promise<UserPublicDetails> {
     const user = await this.userModel.findById(id).exec();
+    Logger.log({ user });
     return (
       user && {
         _id: user._id,

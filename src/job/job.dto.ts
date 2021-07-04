@@ -1,4 +1,4 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, PartialType } from '@nestjs/swagger';
 import { IsIn, IsString } from 'class-validator';
 import { DocumentDto } from '../constants';
 import { Job, JobLevel, JobLevelEnum } from './job.type';
@@ -6,7 +6,7 @@ import { Job, JobLevel, JobLevelEnum } from './job.type';
 export class JobDto implements Job {
   @ApiProperty({
     description: 'Title of the job',
-    examples: ['Product Owner', 'Software Engineer'],
+    example: 'Product Owner',
   })
   @IsString()
   title: string;
@@ -34,6 +34,8 @@ export class JobDto implements Job {
   })
   requirements: string[];
 }
+
+export class UpdateJobDto extends PartialType(JobDto) {}
 
 export class JobResponse extends JobDto implements DocumentDto {
   @ApiProperty({
