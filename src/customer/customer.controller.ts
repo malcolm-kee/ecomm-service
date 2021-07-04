@@ -37,6 +37,7 @@ export class CustomerController {
   })
   @Post('register')
   register(@Body() body: RegisterDto) {
+    console.log('creating account', body);
     return this.service.createUser(body);
   }
 

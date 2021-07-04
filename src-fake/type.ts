@@ -81,6 +81,28 @@ export interface ProductDto extends Product {
   smallImagePath: string | null;
 }
 
+export const ItemConditionEnum = [
+  'new',
+  'used_like-new',
+  'used_good',
+  'used_fair',
+] as const;
+
+export type ItemCondition = typeof ItemConditionEnum[number];
+
+export const ItemAvailabilityEnum = ['in-stock', 'single-item'] as const;
+
+export type ItemAvailability = typeof ItemAvailabilityEnum[number];
+
+export interface MarketingplaceListing {
+  title: string;
+  price: number;
+  category?: string;
+  condition: ItemCondition;
+  description: string;
+  availability: ItemAvailability;
+}
+
 export type DbProduct = Omit<ProductDto, 'smallImagePath'> & {
   blurhash: string;
 };

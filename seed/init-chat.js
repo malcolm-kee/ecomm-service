@@ -12,9 +12,11 @@ exports.initChat = async function initChat() {
     avatar: '',
   };
 
-  await createUsers({
+  const createdRootUsers = await createUsers({
     userData: [rootUser],
   });
+
+  console.log({ createdRootUsers });
 
   const loginResult = await agent
     .post(`${baseUrl}/login`)

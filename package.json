@@ -7,6 +7,7 @@
   "license": "UNLICENSED",
   "scripts": {
     "prebuild": "rimraf dist",
+    "nest": "nest",
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "concurrently \"node dist/main\" \"node seed\"",
@@ -60,7 +61,7 @@
     "superagent": "^6.1.0",
     "swagger-ui-express": "^4.1.4",
     "utf-8-validate": "^5.0.2",
-    "ws": "^7.5.1"
+    "ws": "^7.5.2"
   },
   "devDependencies": {
     "@nestjs/cli": "^7.5.1",
