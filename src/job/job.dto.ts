@@ -17,7 +17,7 @@ export class JobDto implements Job {
   @ApiProperty({
     enum: JobLevelEnum,
   })
-  @IsIn(JobLevelEnum as any)
+  @IsIn(JobLevelEnum)
   @IsString()
   level: JobLevel;
 

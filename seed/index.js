@@ -6,6 +6,7 @@ const { initChat } = require('./init-chat');
 const { seedComments } = require('./seed-comments');
 const { seedJobs } = require('./seed-jobs');
 const { seedMarketing } = require('./seed-marketing');
+const { seedListings } = require('./seed-listings');
 const { seedProducts } = require('./seed-products');
 
 const waitUntil = (callback, { timeout = 3000, retries = 3 } = {}) =>
@@ -49,6 +50,7 @@ const waitUntil = (callback, { timeout = 3000, retries = 3 } = {}) =>
       createUsers(),
       seedJobs(),
       seedMarketing(),
+      seedListings()
     ]);
 
     await seedComments(productIdMap);

@@ -9,16 +9,25 @@ import rimraf from 'rimraf';
 import {
   imageOutputFolder,
   numOfUsers,
+  numOfListings,
   outputFolder,
   publicPath,
 } from './constants';
 import { createCommentDb } from './create-comment-db';
 import { createProductDb } from './create-product-db';
 import { createUserDb } from './create-user-db';
+import { createMarketplaceListingDb } from './create-marketplace-listing-db';
 import { encodeImageToBlurHash, ImageProcessor } from './image-processor';
 import jobPostings from './jobs.json';
 import { processBannerImages } from './process-banner-images';
-import { DbBanner, DbComment, DbProduct, DbUser, JobPosting } from './type';
+import {
+  DbBanner,
+  DbComment,
+  DbProduct,
+  DbUser,
+  JobPosting,
+  MarketingplaceListing,
+} from './type';
 
 const fsys = fs.promises;
 
@@ -50,12 +59,14 @@ async function buildDb({
   users,
   comments,
   jobs,
+  listings,
 }: {
   products: DbProduct[];
   banners: DbBanner[];
   users: DbUser[];
   comments: DbComment[];
   jobs: JobPosting[];
+  listings: MarketingplaceListing[];
 }) {
   return fsys.writeFile(
     path.resolve(outputFolder, 'db.json'),
@@ -65,6 +76,7 @@ async function buildDb({
       users,
       products,
       jobs,
+      listings,
       chats: [],
     }),
     'utf8'
@@ -115,10 +127,11 @@ async function build() {
 
     await clean();
     await setupPublicFolder();
-    const [products, users, banners] = await Promise.all([
+    const [products, users, banners, listings] = await Promise.all([
       createProductDb(imageProcessor),
       createUserDb(numOfUsers),
       processBannerImages(imageProcessor),
+      createMarketplaceListingDb(numOfListings),
       generateHomePage(),
     ]);
     const comments = createCommentDb(products, users);
@@ -154,6 +167,7 @@ async function build() {
       users,
       comments,
       jobs: jobPostings as JobPosting[],
+      listings,
     });
   } catch (err) {
     console.error(err);
