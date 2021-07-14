@@ -7,13 +7,23 @@ import {
 } from './type';
 
 function createFakeListing(): MarketingplaceListing {
-  return {
-    title: faker.commerce.product(),
-    description: faker.commerce.productDescription(),
-    price: Number(faker.commerce.price()),
-    condition: _.sample(ItemConditionEnum),
-    availability: _.sample(ItemAvailabilityEnum),
-  };
+  const availability = _.sample(ItemAvailabilityEnum);
+
+  return Object.assign(
+    {},
+    {
+      title: faker.commerce.product(),
+      description: faker.commerce.productDescription(),
+      price: Number(faker.commerce.price()),
+      condition: _.sample(ItemConditionEnum),
+      availability,
+    },
+    availability === 'in-stock'
+      ? {
+          numOfStock: _.sample([1, 2, 3, 5, 8, 13, 21]),
+        }
+      : {}
+  );
 }
 
 export function createMarketplaceListingDb(listingCount: number) {

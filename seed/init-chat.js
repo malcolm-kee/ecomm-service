@@ -12,11 +12,9 @@ exports.initChat = async function initChat() {
     avatar: '',
   };
 
-  const createdRootUsers = await createUsers({
+  await createUsers({
     userData: [rootUser],
   });
-
-  console.log({ createdRootUsers });
 
   const loginResult = await agent
     .post(`${baseUrl}/login`)
@@ -25,7 +23,7 @@ exports.initChat = async function initChat() {
       username: rootUser.email,
       password: rootUser.password,
     })
-    .then(res => res.body);
+    .then((res) => res.body);
 
   await agent
     .post(`${baseUrl}/chat/room`)

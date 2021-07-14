@@ -101,6 +101,7 @@ export interface MarketingplaceListing {
   condition: ItemCondition;
   description: string;
   availability: ItemAvailability;
+  numOfStock?: number;
 }
 
 export type DbProduct = Omit<ProductDto, 'smallImagePath'> & {

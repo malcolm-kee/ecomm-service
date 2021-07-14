@@ -12,6 +12,7 @@ export const JobSchema = new Schema<Job>(
     summary: String,
     descriptions: [String],
     requirements: [String],
+    headcount: Number,
   },
   { timestamps: true }
 );

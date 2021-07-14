@@ -1,5 +1,5 @@
 import { ApiProperty, PartialType } from '@nestjs/swagger';
-import { IsIn, IsString } from 'class-validator';
+import { IsIn, IsInt, IsNumber, IsString, Min } from 'class-validator';
 import { DocumentDto } from '../constants';
 import { Job, JobLevel, JobLevelEnum } from './job.type';
 
@@ -33,6 +33,11 @@ export class JobDto implements Job {
     each: true,
   })
   requirements: string[];
+
+  @IsNumber()
+  @Min(1)
+  @IsInt()
+  headcount: number;
 }
 
 export class UpdateJobDto extends PartialType(JobDto) {}

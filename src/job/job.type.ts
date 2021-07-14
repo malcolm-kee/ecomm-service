@@ -16,6 +16,7 @@ export type Job = {
   summary: string;
   descriptions: string[];
   requirements: string[];
+  headcount: number;
 };
 
 export type JobDocument = Job & Document;

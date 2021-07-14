@@ -1,5 +1,5 @@
 import { ApiProperty, PartialType } from '@nestjs/swagger';
-import { IsIn, IsNumber, IsOptional, IsString } from 'class-validator';
+import { IsIn, IsInt, IsNumber, IsOptional, IsString } from 'class-validator';
 import { DocumentDto } from '../constants';
 import {
   ItemAvailability,
@@ -42,6 +42,15 @@ export class MarketplaceListingDto implements MarketplaceListing {
   })
   @IsIn(ItemAvailabilityEnum)
   availability: ItemAvailability;
+
+  @ApiProperty({
+    description:
+      'Num of available stock. Only applicable if availability is in-stock',
+  })
+  @IsOptional()
+  @IsNumber()
+  @IsInt()
+  numOfStock?: number;
 }
 
 export class UpdateMarketplaceListingDto extends PartialType(
@@ -53,7 +62,7 @@ export class MarketplaceListingResponse
   implements DocumentDto
 {
   @ApiProperty({
-    description: 'Unique id for the job',
+    description: 'Unique id for the listing',
   })
   _id: string;
   __v: number;

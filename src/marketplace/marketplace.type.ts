@@ -20,6 +20,7 @@ export type MarketplaceListing = {
   condition: ItemCondition;
   description: string;
   availability: ItemAvailability;
+  numOfStock?: number;
 };
 
 export type MarketplaceListingDocument = MarketplaceListing & Document;
