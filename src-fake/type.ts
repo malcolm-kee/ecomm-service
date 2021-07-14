@@ -101,6 +101,7 @@ export interface MarketingplaceListing {
   condition: ItemCondition;
   description: string;
   availability: ItemAvailability;
+  imageUrl: string;
   numOfStock?: number;
 }
 

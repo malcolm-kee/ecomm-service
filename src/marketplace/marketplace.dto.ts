@@ -44,6 +44,15 @@ export class MarketplaceListingDto implements MarketplaceListing {
   availability: ItemAvailability;
 
   @ApiProperty({
+    description: 'Image for the listing',
+    example:
+      'https://images.unsplash.com/photo-1594995846645-d58328c3ffa4?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=543&h=384&q=80',
+  })
+  @IsOptional()
+  @IsString()
+  imageUrl?: string;
+
+  @ApiProperty({
     description:
       'Num of available stock. Only applicable if availability is in-stock',
   })

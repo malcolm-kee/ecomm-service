@@ -19,6 +19,7 @@ export const MarketplaceListingSchema = new Schema<MarketplaceListing>(
       type: String,
       enum: ItemAvailabilityEnum,
     },
+    imageUrl: String,
     numOfStock: Number,
   },
   { timestamps: true }
