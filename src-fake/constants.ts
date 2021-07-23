@@ -11,6 +11,7 @@ export const imageOutputFolder = path.join(publicPath, 'images');
 export const numOfUsers = isDev ? 5 : 100;
 export const numOfProducts = isDev ? 2 : 50;
 export const numOfListings = 30;
+export const numOfJobs = isDev ? 2 : 100;
 const APP_NAME = process.env.HEROKU_APP_NAME;
 const PORT = process.env.PORT || 3000;
 const app_baseurl = APP_NAME

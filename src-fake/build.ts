@@ -2,23 +2,24 @@ require('dotenv').config();
 
 import { once } from 'events';
 import fs from 'fs';
-import mkdirp from 'mkdirp';
 import markdownIt from 'markdown-it';
+import mkdirp from 'mkdirp';
 import path from 'path';
 import rimraf from 'rimraf';
 import {
   imageOutputFolder,
-  numOfUsers,
+  numOfJobs,
   numOfListings,
+  numOfUsers,
   outputFolder,
   publicPath,
 } from './constants';
 import { createCommentDb } from './create-comment-db';
+import { createJobDb } from './create-job-db';
+import { createMarketplaceListingDb } from './create-marketplace-listing-db';
 import { createProductDb } from './create-product-db';
 import { createUserDb } from './create-user-db';
-import { createMarketplaceListingDb } from './create-marketplace-listing-db';
 import { encodeImageToBlurHash, ImageProcessor } from './image-processor';
-import jobPostings from './jobs.json';
 import { processBannerImages } from './process-banner-images';
 import {
   DbBanner,
@@ -166,7 +167,7 @@ async function build() {
       products: finalProducts,
       users,
       comments,
-      jobs: jobPostings as JobPosting[],
+      jobs: createJobDb(numOfJobs),
       listings,
     });
   } catch (err) {

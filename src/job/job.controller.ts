@@ -1,13 +1,15 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
-  Post,
-  Delete,
   Patch,
+  Post,
+  Query,
 } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { Pagination } from '../shared/pagination.decorator';
 import { JobDto, JobResponse, UpdateJobDto } from './job.dto';
 import { JobService } from './job.service';
 
@@ -24,9 +26,23 @@ export class JobController {
     type: JobResponse,
     isArray: true,
   })
+  @Pagination()
   @Get()
-  getJobs() {
-    return this.jobService.getMany();
+  async getJobs(
+    @Query('page') page?: number,
+    @Query('limit') limit?: number,
+    @Query() query?: any
+  ) {
+    const delay = query.delay;
+
+    if (delay) {
+      await new Promise((f) => setTimeout(f, delay));
+    }
+
+    return this.jobService.getMany({
+      page,
+      limit,
+    });
   }
 
   @ApiOperation({

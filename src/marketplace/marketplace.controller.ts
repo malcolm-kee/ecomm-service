@@ -5,9 +5,11 @@ import {
   Get,
   Param,
   Patch,
+  Query,
   Post,
 } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { Pagination } from 'shared/pagination.decorator';
 import {
   MarketplaceListingDto,
   MarketplaceListingResponse,
@@ -28,9 +30,13 @@ export class MarketplaceController {
     type: MarketplaceListingResponse,
     isArray: true,
   })
+  @Pagination()
   @Get()
-  getListings() {
-    return this.listingService.getMany();
+  getListings(@Query('page') page?: number, @Query('limit') limit?: number) {
+    return this.listingService.getMany({
+      page,
+      limit,
+    });
   }
 
   @ApiOperation({

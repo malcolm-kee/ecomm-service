@@ -24,11 +24,15 @@ export class MarketplaceService {
 
   getMany({
     before,
+    page = 1,
     limit = 10,
   }: {
     before?: string;
+    page?: number;
     limit?: number | string;
   } = {}) {
+    const limitValue = Number(limit);
+
     return this.listingModel
       .find(
         before
@@ -43,7 +47,8 @@ export class MarketplaceService {
           sort: {
             createdAt: -1,
           },
-          limit: Number(limit),
+          skip: limitValue * Math.max(page - 1, 0),
+          limit: limitValue,
         }
       )
       .exec();

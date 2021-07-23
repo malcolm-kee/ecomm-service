@@ -66,13 +66,13 @@ export interface ProductImageInfo {
 }
 
 export interface JobPosting {
-  id: number;
+  id: number | string;
   title: string;
   department: string;
   level: 'internship' | 'entry' | 'experienced' | 'manager';
   summary: string;
   descriptions: string[];
-  requirements: string[];
+  requirements?: string[];
 }
 
 export interface ProductDto extends Product {

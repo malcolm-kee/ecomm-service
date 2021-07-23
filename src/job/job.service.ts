@@ -17,11 +17,15 @@ export class JobService {
 
   getMany({
     before,
+    page = 1,
     limit = 10,
   }: {
+    page?: number;
     before?: string;
     limit?: number | string;
   } = {}) {
+    const limitValue = Number(limit);
+
     return this.jobModel
       .find(
         before
@@ -36,7 +40,8 @@ export class JobService {
           sort: {
             createdAt: -1,
           },
-          limit: Number(limit),
+          skip: limitValue * Math.max(page - 1, 0),
+          limit: limitValue,
         }
       )
       .exec();
