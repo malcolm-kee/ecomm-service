@@ -73,6 +73,7 @@ export interface JobPosting {
   summary: string;
   descriptions: string[];
   requirements?: string[];
+  headcount: number;
 }
 
 export interface ProductDto extends Product {
