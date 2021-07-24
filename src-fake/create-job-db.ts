@@ -25,7 +25,8 @@ export const createJobDb = (numOfJob: number): JobPosting[] => {
       level: _.sample(LEVELS),
       descriptions: [faker.name.jobDescriptor()],
       summary: faker.name.jobDescriptor(),
-      headcount: faker.datatype.number(10),
+      headcount: faker.datatype.number({ min: 1, max: 10 }),
+      requirements: [faker.company.bs(), faker.company.bs()],
     });
   });
 

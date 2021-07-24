@@ -26,7 +26,7 @@ import { MarketplaceModule } from './marketplace/marketplace.module';
       useFactory: async () => {
         const db = await MongoMemoryServer.create();
         return {
-          uri: await db.getUri(),
+          uri: db.getUri(),
         };
       },
     }),
