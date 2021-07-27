@@ -1,5 +1,12 @@
 import { ApiProperty, PartialType } from '@nestjs/swagger';
-import { IsIn, IsInt, IsNumber, IsString, Min } from 'class-validator';
+import {
+  IsIn,
+  IsInt,
+  IsNumber,
+  IsString,
+  Min,
+  IsOptional,
+} from 'class-validator';
 import { DocumentDto } from '../constants';
 import { Job, JobLevel, JobLevelEnum } from './job.type';
 
@@ -11,6 +18,10 @@ export class JobDto implements Job {
   @IsString()
   title: string;
 
+  @ApiProperty({
+    description: 'Department the job is assigned to',
+    example: 'Product Management',
+  })
   @IsString()
   department: string;
 
@@ -21,18 +32,24 @@ export class JobDto implements Job {
   @IsString()
   level: JobLevel;
 
+  @ApiProperty({
+    example:
+      'The job requires next-gen vision and on-the-ground can do mindset.',
+  })
   @IsString()
   summary: string;
 
   @IsString({
     each: true,
   })
-  descriptions: string[];
+  @IsOptional()
+  descriptions?: string[];
 
   @IsString({
     each: true,
   })
-  requirements: string[];
+  @IsOptional()
+  requirements?: string[];
 
   @IsNumber()
   @Min(1)

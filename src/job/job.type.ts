@@ -14,8 +14,8 @@ export type Job = {
   department: string;
   level: JobLevel;
   summary: string;
-  descriptions: string[];
-  requirements: string[];
+  descriptions?: string[];
+  requirements?: string[];
   headcount: number;
 };
 
