@@ -9,7 +9,7 @@ const { seedMarketing } = require('./seed-marketing');
 const { seedListings } = require('./seed-listings');
 const { seedProducts } = require('./seed-products');
 
-const waitUntil = (callback, { timeout = 3000, retries = 3 } = {}) =>
+const waitUntil = (callback, { timeout = 10000, retries = 20 } = {}) =>
   new Promise((fulfill, reject) => {
     let retryCount = 0;
 
@@ -50,7 +50,7 @@ const waitUntil = (callback, { timeout = 3000, retries = 3 } = {}) =>
       createUsers(),
       seedJobs(),
       seedMarketing(),
-      seedListings()
+      seedListings(),
     ]);
 
     await seedComments(productIdMap);
