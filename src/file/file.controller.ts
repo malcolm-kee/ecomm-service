@@ -24,6 +24,7 @@ export class FileController {
 
   @ApiOperation({
     summary: 'Upload a file',
+    operationId: 'uploadFile',
   })
   @ApiConsumes('multipart/form-data')
   @ApiBody({

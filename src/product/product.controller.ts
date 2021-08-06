@@ -25,6 +25,7 @@ export class ProductController {
 
   @ApiOperation({
     summary: 'Get list of available products',
+    operationId: 'listProducts',
   })
   @ApiQuery({
     name: 'before',
@@ -53,6 +54,7 @@ export class ProductController {
 
   @ApiOperation({
     summary: 'Get details of one product',
+    operationId: 'getProduct',
   })
   @ApiResponse({
     status: 200,
@@ -65,6 +67,7 @@ export class ProductController {
 
   @ApiOperation({
     summary: 'Create a product',
+    operationId: 'createProduct',
   })
   @ApiResponse({
     status: 201,
@@ -77,6 +80,7 @@ export class ProductController {
 
   @ApiOperation({
     summary: 'Update a product',
+    operationId: 'updateProduct',
   })
   @ApiResponse({
     status: 200,
@@ -103,6 +107,7 @@ export class ProductController {
 
   @ApiOperation({
     summary: 'Add comment to a product',
+    operationId: 'addProductComment',
   })
   @ApiResponse({
     status: 201,
@@ -129,6 +134,7 @@ export class ProductController {
 
   @ApiOperation({
     summary: 'Delete a product',
+    operationId: 'deleteProduct',
   })
   @ApiResponse({
     status: 200,

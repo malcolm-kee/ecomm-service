@@ -20,6 +20,7 @@ export class JobController {
 
   @ApiOperation({
     summary: 'Get list of available jobs',
+    operationId: 'listJobs',
   })
   @ApiResponse({
     status: 200,
@@ -47,6 +48,7 @@ export class JobController {
 
   @ApiOperation({
     summary: 'Get details of one job',
+    operationId: 'getJob',
   })
   @ApiResponse({
     status: 200,
@@ -59,6 +61,7 @@ export class JobController {
 
   @ApiOperation({
     summary: 'Create a job',
+    operationId: 'createJob',
   })
   @ApiResponse({
     status: 200,
@@ -71,6 +74,7 @@ export class JobController {
 
   @ApiOperation({
     summary: 'Update a job',
+    operationId: 'updateJob',
   })
   @ApiResponse({
     status: 200,
@@ -83,6 +87,7 @@ export class JobController {
 
   @ApiOperation({
     summary: 'Delete a job',
+    operationId: 'deleteJob',
   })
   @ApiResponse({
     status: 200,

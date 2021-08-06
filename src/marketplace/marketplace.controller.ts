@@ -24,6 +24,7 @@ export class MarketplaceController {
 
   @ApiOperation({
     summary: 'Get all listings in marketplace',
+    operationId: 'listListings',
   })
   @ApiResponse({
     status: 200,
@@ -41,6 +42,7 @@ export class MarketplaceController {
 
   @ApiOperation({
     summary: 'Get details of one listing',
+    operationId: 'getListing',
   })
   @ApiResponse({
     status: 200,
@@ -53,6 +55,7 @@ export class MarketplaceController {
 
   @ApiOperation({
     summary: 'Create a listing',
+    operationId: 'createListing',
   })
   @ApiResponse({
     status: 201,
@@ -65,6 +68,7 @@ export class MarketplaceController {
 
   @ApiOperation({
     summary: 'Update a listing',
+    operationId: 'updateListing',
   })
   @ApiResponse({
     status: 200,
@@ -80,6 +84,7 @@ export class MarketplaceController {
 
   @ApiOperation({
     summary: 'Delete a listing',
+    operationId: 'deleteListing',
   })
   @ApiResponse({
     status: 200,

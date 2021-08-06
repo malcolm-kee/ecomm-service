@@ -34,6 +34,7 @@ export class CustomerController {
 
   @ApiOperation({
     summary: 'Create an account',
+    operationId: 'register',
   })
   @Post('register')
   register(@Body() body: RegisterDto) {
@@ -42,6 +43,7 @@ export class CustomerController {
 
   @ApiOperation({
     summary: 'Login your account',
+    operationId: 'login',
   })
   @ApiBody({
     type: LoginDto,
@@ -60,6 +62,7 @@ export class CustomerController {
 
   @ApiOperation({
     summary: 'Get logged-in user profile',
+    operationId: 'getProfile',
   })
   @ApiBearerAuth()
   @ApiResponse({

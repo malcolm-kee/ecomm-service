@@ -32,6 +32,7 @@ export class ChatController {
 
   @ApiOperation({
     summary: 'Get all rooms that have been joined by logged-in user',
+    operationId: 'listJoinedChatRooms',
   })
   @ApiResponse({
     status: 200,
@@ -52,6 +53,7 @@ export class ChatController {
 
   @ApiOperation({
     summary: 'Get the global chat room that all user will be added to.',
+    operationId: 'getGlobalChatRoom',
   })
   @ApiResponse({
     status: 200,
@@ -64,6 +66,7 @@ export class ChatController {
 
   @ApiOperation({
     summary: 'Get a chat room with a specific id.',
+    operationId: 'getChatRoom',
   })
   @ApiResponse({
     status: 200,
@@ -76,6 +79,7 @@ export class ChatController {
 
   @ApiOperation({
     summary: 'Create a chat room',
+    operationId: 'createChatRoom',
   })
   @ApiResponse({
     status: 201,
@@ -96,6 +100,7 @@ export class ChatController {
 
   @ApiOperation({
     summary: 'Join a chat room',
+    operationId: 'jobChatRoom',
   })
   @ApiResponse({
     status: 200,
@@ -114,6 +119,7 @@ export class ChatController {
 
   @ApiOperation({
     summary: 'Send a chat message',
+    operationId: 'sendChatMessage',
   })
   @ApiResponse({
     status: 201,
@@ -135,6 +141,7 @@ export class ChatController {
 
   @ApiOperation({
     summary: 'Update a chat message',
+    operationId: 'updateChatMessage',
   })
   @ApiResponse({
     status: 200,
