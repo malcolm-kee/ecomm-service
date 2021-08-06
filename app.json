@@ -1,0 +1,12 @@
+{
+  "name": "Ecomm Service",
+  "description": "Services to support an e-commerce platform.",
+  "keywords": ["swagger", "nodejs"],
+  "env": {
+    "JWT_SECRET": {
+      "description": "A secret key for verifying the integrity of signed cookies.",
+      "generator": "secret"
+    }
+  },
+  "repository": "https://github.com/malcolm-kee/ecomm-service"
+}
