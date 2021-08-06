@@ -2,7 +2,6 @@ require('dotenv').config();
 
 import { once } from 'events';
 import fs from 'fs';
-import markdownIt from 'markdown-it';
 import mkdirp from 'mkdirp';
 import path from 'path';
 import rimraf from 'rimraf';
@@ -84,42 +83,11 @@ async function buildDb({
   );
 }
 
-async function generateHomePage() {
-  const fileContent = await fsys.readFile(
-    path.resolve(__dirname, '..', 'README.md'),
-    {
-      encoding: 'utf-8',
-    }
-  );
+async function prepareHomePage() {
+  const originalIndexHtml = path.resolve(__dirname, '..', 'index.html');
+  const target = path.resolve(publicPath, 'index.html');
 
-  const parsedMd = markdownIt({
-    html: true,
-  }).render(fileContent);
-
-  await fsys.writeFile(
-    path.resolve(publicPath, 'index.html'),
-    `<!DOCTYPE html>
-  <html>
-    <head>
-      <title>ecomm-service</title>
-      <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/4.0.0/github-markdown.min.css" ></link>
-      <style>
-        .markdown-body {
-          max-width: 70ch;
-          margin: 0 auto;
-        }
-      </style>
-    </head>
-    <body>
-      <div class="markdown-body">
-      ${parsedMd}
-      </div>
-    </body>
-  </html>`,
-    {
-      encoding: 'utf-8',
-    }
-  );
+  await fsys.copyFile(originalIndexHtml, target);
 }
 
 async function build() {
@@ -133,7 +101,7 @@ async function build() {
       createUserDb(numOfUsers),
       processBannerImages(imageProcessor),
       createMarketplaceListingDb(numOfListings),
-      generateHomePage(),
+      prepareHomePage(),
     ]);
     const comments = createCommentDb(products, users);
 
