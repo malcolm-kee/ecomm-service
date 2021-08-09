@@ -33,18 +33,8 @@ const waitUntil = (callback, { timeout = 10000, retries = 20 } = {}) =>
     runCode();
   });
 
-(async function seedData() {
+async function seedData(rootToken) {
   try {
-    await waitUntil(() =>
-      agent.get(`${baseUrl}/docs`).then((res) => {
-        if (!res.ok) {
-          throw new Error(`Response not ok`);
-        }
-      })
-    );
-
-    const rootToken = await initChat();
-
     const [productIdMap] = await Promise.all([
       seedProducts(),
       createUsers(),
@@ -95,5 +85,37 @@ const waitUntil = (callback, { timeout = 10000, retries = 20 } = {}) =>
     console.log({ newRoom, result });
   } catch (fatalError) {
     console.error(fatalError);
+  }
+}
+
+(async function run() {
+  await waitUntil(() =>
+    agent.get(`${baseUrl}/docs`).then((res) => {
+      if (!res.ok) {
+        throw new Error(`Response not ok`);
+      }
+    })
+  );
+
+  const rootToken = await initChat();
+
+  await seedData(rootToken);
+
+  while (true) {
+    await new Promise((fulfill) => setTimeout(fulfill, 30000));
+
+    console.log('Checking if data still persists...');
+
+    const result = await agent
+      .get(`${baseUrl}/job`)
+      .type('json')
+      .then((res) => res.body);
+
+    if (Array.isArray(result) && result.length > 0) {
+      console.log('Data still persist!');
+    } else {
+      console.log('Data is gone/missing. Reseeding...');
+      await seedData(rootToken);
+    }
   }
 })();
