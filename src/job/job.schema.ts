@@ -1,5 +1,5 @@
 import { Schema } from 'mongoose';
-import { Job, JobLevelEnum } from './job.type';
+import { Job, JobLevelEnum, JOB_SCHEMA } from './job.type';
 
 export const JobSchema = new Schema<Job>(
   {
@@ -15,4 +15,15 @@ export const JobSchema = new Schema<Job>(
     headcount: Number,
   },
   { timestamps: true }
+);
+
+export const JobApplicationSchema = new Schema(
+  {
+    applicantUserId: { type: Schema.Types.ObjectId, required: true },
+    job: { type: Schema.Types.ObjectId, ref: JOB_SCHEMA, required: true },
+    linkedinUrl: { type: String, required: true },
+  },
+  {
+    timestamps: true,
+  }
 );

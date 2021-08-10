@@ -1,11 +1,22 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { JOB_SCHEMA, JobDocument, Job } from './job.type';
 import { Model } from 'mongoose';
+import { CreateJobApplicationDto } from './job.dto';
+import {
+  Job,
+  JobApplicationDocument,
+  JobDocument,
+  JOB_APPLICATION_SCHEMA,
+  JOB_SCHEMA,
+} from './job.type';
 
 @Injectable()
 export class JobService {
-  constructor(@InjectModel(JOB_SCHEMA) private jobModel: Model<JobDocument>) {}
+  constructor(
+    @InjectModel(JOB_SCHEMA) private jobModel: Model<JobDocument>,
+    @InjectModel(JOB_APPLICATION_SCHEMA)
+    private jobApplicationModel: Model<JobApplicationDocument>
+  ) {}
 
   create(job: Job) {
     return this.jobModel.create(job);
@@ -53,5 +64,28 @@ export class JobService {
 
   deleteOne(id: string) {
     return this.jobModel.findByIdAndRemove(id).exec();
+  }
+
+  async createJobApplication(data: CreateJobApplicationDto, userId: string) {
+    const createdApplication = await this.jobApplicationModel.create({
+      job: data.jobId,
+      linkedinUrl: data.linkedinUrl,
+      applicantUserId: userId,
+    });
+
+    return createdApplication.populate('job').execPopulate();
+  }
+
+  getJobApplications(filter: { job?: string; applicantUserId: string }) {
+    return this.jobApplicationModel.find(filter).populate('job').exec();
+  }
+
+  deleteJobApplication(applicationId: string, userId: string) {
+    return this.jobApplicationModel
+      .findOneAndRemove({
+        _id: applicationId,
+        applicantUserId: userId,
+      })
+      .exec();
   }
 }

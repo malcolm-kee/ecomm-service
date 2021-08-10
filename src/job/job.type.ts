@@ -22,3 +22,17 @@ export type Job = {
 export type JobDocument = Job & Document;
 
 export const JOB_SCHEMA = 'Job';
+
+export interface JobApplication {
+  applicantUserId: string;
+  job: Job;
+  linkedinUrl: string;
+}
+
+export type JobApplicationDocument = {
+  applicantUserId: string;
+  job: string;
+  linkedinUrl: string;
+} & Document;
+
+export const JOB_APPLICATION_SCHEMA = 'JobApplication';

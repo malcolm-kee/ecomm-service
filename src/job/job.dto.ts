@@ -68,3 +68,19 @@ export class JobResponse extends JobDto implements DocumentDto {
   createdAt: string;
   updatedAt: string;
 }
+
+export class CreateJobApplicationDto {
+  jobId: string;
+  @ApiProperty({
+    example: 'https://www.linkedin.com/in/leehsienloong/',
+  })
+  linkedinUrl: string;
+}
+
+export class JobApplicationDto {
+  job: JobResponse;
+  @ApiProperty({
+    example: 'https://www.linkedin.com/in/leehsienloong/',
+  })
+  linkedinUrl: string;
+}
