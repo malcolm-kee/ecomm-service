@@ -1,9 +1,15 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { MarketplaceController } from './marketplace.controller';
-import { MarketplaceListingSchema } from './marketplace.schema';
+import {
+  MarketplaceCartSchema,
+  MarketplaceListingSchema,
+} from './marketplace.schema';
 import { MarketplaceService } from './marketplace.service';
-import { MARKETPLACE_LISTING_SCHEMA } from './marketplace.type';
+import {
+  MARKETPLACE_CART_SCHEMA,
+  MARKETPLACE_LISTING_SCHEMA,
+} from './marketplace.type';
 
 @Module({
   imports: [
@@ -11,6 +17,10 @@ import { MARKETPLACE_LISTING_SCHEMA } from './marketplace.type';
       {
         name: MARKETPLACE_LISTING_SCHEMA,
         schema: MarketplaceListingSchema,
+      },
+      {
+        name: MARKETPLACE_CART_SCHEMA,
+        schema: MarketplaceCartSchema,
       },
     ]),
   ],

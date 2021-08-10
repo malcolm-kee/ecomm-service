@@ -7,12 +7,11 @@ import * as path from 'path';
 import { AuthModule } from './auth/auth.module';
 import { ChatModule } from './chat/chat.module';
 import { PUBLIC_PATH } from './constants';
-import { CustomerModule } from './customer/customer.module';
 import { FileModule } from './file/file.module';
 import { JobModule } from './job/job.module';
 import { MarketingModule } from './marketing/marketing.module';
-import { ProductModule } from './product/product.module';
 import { MarketplaceModule } from './marketplace/marketplace.module';
+import { ProductModule } from './product/product.module';
 
 @Module({
   imports: [
@@ -35,7 +34,6 @@ import { MarketplaceModule } from './marketplace/marketplace.module';
     MarketingModule,
     FileModule,
     AuthModule,
-    CustomerModule,
     ChatModule,
     MarketplaceModule,
   ],

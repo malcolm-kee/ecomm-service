@@ -4,7 +4,7 @@ import { ChatService } from 'chat/chat.service';
 import { omit } from 'lodash';
 import { Model } from 'mongoose';
 import {
-  User,
+  UserData,
   UserDocument,
   UserPublicDetails,
   USER_SCHEMA_NAME,
@@ -18,7 +18,7 @@ export class UserService {
     private readonly chatService: ChatService
   ) {}
 
-  async create(userData: User) {
+  async create(userData: UserData) {
     const user = new this.userModel(userData);
     const savedUser = await user.save();
 

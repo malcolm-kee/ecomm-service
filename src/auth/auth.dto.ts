@@ -1,4 +1,4 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, PickType } from '@nestjs/swagger';
 import {
   IsEmail,
   IsNotEmpty,
@@ -7,7 +7,7 @@ import {
   MinLength,
   ValidateIf,
 } from 'class-validator';
-import { JwtPayload } from '../auth';
+import { JwtPayload } from './jwt.type';
 
 export class RegisterDto {
   @IsString()
@@ -62,9 +62,15 @@ export class LoginResponse {
   access_token: string;
 }
 
-export class UserProfile implements JwtPayload {
+export class UserProfile
+  extends PickType(RegisterDto, ['name', 'email', 'avatar'])
+  implements JwtPayload
+{
   userId: string;
-  name: string;
-  email: string;
-  avatar: string;
 }
+
+export class RegisterResponse extends PickType(RegisterDto, [
+  'name',
+  'email',
+  'avatar',
+]) {}

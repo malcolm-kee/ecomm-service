@@ -7,6 +7,7 @@ import {
   ItemCondition,
   ItemConditionEnum,
   MarketplaceListing,
+  MarketplaceCartItem,
 } from './marketplace.type';
 
 export class MarketplaceListingDto implements MarketplaceListing {
@@ -77,4 +78,20 @@ export class MarketplaceListingResponse
   __v: number;
   createdAt: string;
   updatedAt: string;
+}
+
+export class AddMarketplaceCartItemDto {
+  listingId: string;
+  quantity: number;
+}
+
+export class MarketplaceCartItemDto implements MarketplaceCartItem {
+  @ApiProperty({
+    type: MarketplaceListingDto,
+  })
+  listing: MarketplaceListingDto;
+  @ApiProperty({
+    example: 2,
+  })
+  quantity: number;
 }

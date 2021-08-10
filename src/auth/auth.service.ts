@@ -1,7 +1,7 @@
 import { ConflictException, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { UserService } from './user/user.service';
-import { User } from './user/user.type';
+import { UserData } from './user/user.type';
 
 @Injectable()
 export class AuthService {
@@ -10,7 +10,7 @@ export class AuthService {
     private readonly jwtService: JwtService
   ) {}
 
-  async createUser(user: User) {
+  async createUser(user: UserData) {
     const currentUser = await this.userService.findOne(user.email);
     if (currentUser) {
       throw new ConflictException({
@@ -32,7 +32,7 @@ export class AuthService {
     return null;
   }
 
-  async login(user: User & { _id: string }) {
+  async login(user: UserData & { _id: string }) {
     const payload = {
       name: user.name,
       email: user.email,

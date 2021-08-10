@@ -1,9 +1,11 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import {
+  MarketplaceCartDocument,
   MarketplaceListing,
   MarketplaceListingDocument,
+  MARKETPLACE_CART_SCHEMA,
   MARKETPLACE_LISTING_SCHEMA,
 } from './marketplace.type';
 
@@ -11,7 +13,9 @@ import {
 export class MarketplaceService {
   constructor(
     @InjectModel(MARKETPLACE_LISTING_SCHEMA)
-    private listingModel: Model<MarketplaceListingDocument>
+    private listingModel: Model<MarketplaceListingDocument>,
+    @InjectModel(MARKETPLACE_CART_SCHEMA)
+    private cartModel: Model<MarketplaceCartDocument>
   ) {}
 
   create(listing: MarketplaceListing) {
@@ -62,5 +66,86 @@ export class MarketplaceService {
 
   deleteOne(id: string) {
     return this.listingModel.findByIdAndRemove(id).exec();
+  }
+
+  async getCartItems(userId: string) {
+    const cart = await this.cartModel
+      .findOne({
+        ownerUserId: userId,
+      })
+      .populate({
+        path: 'items.listing',
+      });
+
+    if (!cart) {
+      return [];
+    }
+
+    return cart.items;
+  }
+
+  async addCartItem(
+    data: {
+      listingId: string;
+      quantity: number;
+    },
+    userId: string
+  ) {
+    const currentCart = await this.cartModel
+      .findOne({
+        ownerUserId: userId,
+      })
+      .exec();
+
+    if (!currentCart) {
+      return this.cartModel.create({
+        ownerUserId: userId,
+        items: [
+          {
+            listing: data.listingId,
+            quantity: data.quantity,
+          },
+        ],
+      });
+    }
+
+    const existingItem = currentCart.items.find(
+      (item) => String(item.listing) === data.listingId
+    );
+
+    if (existingItem) {
+      existingItem.quantity += data.quantity;
+      return currentCart.save();
+    } else {
+      currentCart.items.push({
+        listing: data.listingId,
+        quantity: data.quantity,
+      } as any);
+      return currentCart.save();
+    }
+  }
+
+  async removeCartItem(listingId: string, userId: string) {
+    const currentCart = await this.cartModel
+      .findOne({
+        ownerUserId: userId,
+      })
+      .exec();
+
+    if (!currentCart) {
+      throw new NotFoundException();
+    }
+
+    const existingItem = currentCart.items.find(
+      (item) => String(item.listing) === listingId
+    );
+
+    if (!existingItem) {
+      throw new NotFoundException();
+    }
+
+    currentCart.items.pull(existingItem._id);
+
+    return currentCart.save();
   }
 }

@@ -1,4 +1,4 @@
-import { Document } from 'mongoose';
+import { Document, Types } from 'mongoose';
 
 export const ItemConditionEnum = [
   'new',
@@ -27,3 +27,24 @@ export type MarketplaceListing = {
 export type MarketplaceListingDocument = MarketplaceListing & Document;
 
 export const MARKETPLACE_LISTING_SCHEMA = 'MarketplaceListing';
+
+export interface MarketplaceCartItem {
+  listing: MarketplaceListing;
+  quantity: number;
+}
+export interface MarketplaceCart {
+  ownerUserId: string;
+  items: Array<MarketplaceCartItem>;
+}
+
+export type MarketplaceCartDocument = Omit<MarketplaceCart, 'items'> &
+  Document & {
+    items: Types.Array<
+      {
+        listing: string;
+        quantity: number;
+      } & Document
+    >;
+  };
+
+export const MARKETPLACE_CART_SCHEMA = 'MarketplaceCart';

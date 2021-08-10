@@ -1,40 +1,43 @@
 import {
   Body,
   Controller,
+  Get,
+  HttpCode,
   Post,
   Request,
   UseGuards,
-  HttpCode,
-  Get,
 } from '@nestjs/common';
 import {
-  ApiOperation,
-  ApiTags,
-  ApiBody,
-  ApiResponse,
   ApiBearerAuth,
+  ApiBody,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
 } from '@nestjs/swagger';
 import {
-  AuthService,
-  LocalAuthGuard,
-  AuthenticatedRequest,
-  JwtAuthGuard,
-} from '../auth';
-import {
-  RegisterDto,
   LoginDto,
   LoginResponse,
+  RegisterDto,
+  RegisterResponse,
   UserProfile,
-} from './customer.dto';
+} from './auth.dto';
+import { AuthService } from './auth.service';
+import { JwtAuthGuard } from './jwt.auth.guard';
+import { AuthenticatedRequest } from './jwt.type';
+import { LocalAuthGuard } from './local.auth.guard';
 
-@ApiTags('customer')
+@ApiTags('auth')
 @Controller()
-export class CustomerController {
+export class AuthController {
   constructor(private readonly service: AuthService) {}
 
   @ApiOperation({
     summary: 'Create an account',
     operationId: 'register',
+  })
+  @ApiResponse({
+    status: 201,
+    type: RegisterResponse,
   })
   @Post('register')
   register(@Body() body: RegisterDto) {

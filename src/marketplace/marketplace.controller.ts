@@ -7,13 +7,22 @@ import {
   Patch,
   Query,
   Post,
+  UseGuards,
 } from '@nestjs/common';
-import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
+import { JwtAuthGuard, User } from 'auth';
 import { Pagination } from 'shared/pagination.decorator';
 import {
   MarketplaceListingDto,
   MarketplaceListingResponse,
   UpdateMarketplaceListingDto,
+  AddMarketplaceCartItemDto,
+  MarketplaceCartItemDto,
 } from './marketplace.dto';
 import { MarketplaceService } from './marketplace.service';
 
@@ -93,5 +102,49 @@ export class MarketplaceController {
   @Delete(':id')
   deleteListing(@Param('id') id: string) {
     return this.listingService.deleteOne(id);
+  }
+
+  @ApiOperation({
+    summary: 'Get items in cart',
+    operationId: 'listCartItems',
+  })
+  @ApiResponse({
+    status: 200,
+    type: MarketplaceCartItemDto,
+    isArray: true,
+  })
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard)
+  @Get('cart/items')
+  listCartItems(@User('userId') userId: string) {
+    return this.listingService.getCartItems(userId);
+  }
+
+  @ApiOperation({
+    summary: 'Add listing to cart',
+    operationId: 'addCartItem',
+  })
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard)
+  @Post('cart/items')
+  addItemToCart(
+    @Body() body: AddMarketplaceCartItemDto,
+    @User('userId') userId: string
+  ) {
+    return this.listingService.addCartItem(body, userId);
+  }
+
+  @ApiOperation({
+    summary: 'Remove item from cart',
+    operationId: 'removeCartItem',
+  })
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard)
+  @Delete('cart/items/:listingId')
+  removeItemFromCart(
+    @Param('listingId') listingId: string,
+    @User('userId') userId: string
+  ) {
+    return this.listingService.removeCartItem(listingId, userId);
   }
 }
