@@ -11,6 +11,7 @@ import { FileModule } from './file/file.module';
 import { JobModule } from './job/job.module';
 import { MarketingModule } from './marketing/marketing.module';
 import { MarketplaceModule } from './marketplace/marketplace.module';
+import { MovieModule } from './movie/movie.module';
 import { ProductModule } from './product/product.module';
 
 @Module({
@@ -36,6 +37,7 @@ import { ProductModule } from './product/product.module';
     AuthModule,
     ChatModule,
     MarketplaceModule,
+    MovieModule,
   ],
 })
 export class AppModule {}
