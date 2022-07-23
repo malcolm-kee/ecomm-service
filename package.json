@@ -91,7 +91,7 @@
     "eslint-config-prettier": "^6.13.0",
     "eslint-plugin-import": "^2.22.1",
     "faker": "^5.1.0",
-    "file-type": "^16.0.0",
+    "file-type": "^16.5.4",
     "glob": "^7.1.6",
     "jest": "^27.0.6",
     "mkdirp": "^1.0.4",
