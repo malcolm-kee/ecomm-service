@@ -1,0 +1,9 @@
+Dockerfile
+.dockerignore
+**/node_modules
+/dist-fake
+/build
+/dist
+.git
+.env
+.env.example
