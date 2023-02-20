@@ -7,7 +7,6 @@ import {
 import { InjectModel } from '@nestjs/mongoose';
 import { UserPublicDetails } from 'auth';
 import { UserService } from 'auth/user/user.service';
-import { UpdateWriteOpResult } from 'mongodb';
 import { Model, Types } from 'mongoose';
 import { DocumentDto } from '../constants';
 import {
@@ -153,7 +152,7 @@ export class ChatService {
           },
         }
       )
-      .then((res: UpdateWriteOpResult['result']) => {
+      .then((res) => {
         if (res.ok !== 1 && res.nModified !== 1) {
           throw new NotFoundException();
         }
