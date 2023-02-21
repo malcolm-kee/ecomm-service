@@ -21,6 +21,7 @@ export type Product = {
   image: string;
   department: string;
   price: string;
+  blurhash: string;
   related: string[];
   images: ProductImages | null;
   comments: ProductComment[];

@@ -1,9 +1,10 @@
-import { Module, HttpModule } from '@nestjs/common';
+import { HttpModule } from '@nestjs/axios';
+import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
-import { MovieCommentSchema, MovieSchema } from './movie.schema';
-import { MOVIE_COMMENT_SCHEMA, MOVIE_SCHEMA } from './movie.type';
-import { MovieService } from './movie.service';
 import { MovieController } from './movie.controller';
+import { MovieCommentSchema, MovieSchema } from './movie.schema';
+import { MovieService } from './movie.service';
+import { MOVIE_COMMENT_SCHEMA, MOVIE_SCHEMA } from './movie.type';
 
 @Module({
   imports: [

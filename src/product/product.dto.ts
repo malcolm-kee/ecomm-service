@@ -24,6 +24,8 @@ export class CreateProductDto implements Product {
 
   department: string;
 
+  blurhash: string;
+
   @ApiProperty({
     description: 'Unit price of the product',
     example: '20.99',

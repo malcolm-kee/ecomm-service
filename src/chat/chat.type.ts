@@ -9,7 +9,7 @@ export type ChatMessageDoc = ChatMessage & Document;
 
 export const ChatRoomTypes = ['global', '1-to-1', 'group'] as const;
 
-export type ChatRoomType = typeof ChatRoomTypes[number];
+export type ChatRoomType = (typeof ChatRoomTypes)[number];
 
 export type ChatRoom = {
   roomType: ChatRoomType;
@@ -17,7 +17,7 @@ export type ChatRoom = {
   participantUserIds: string[];
 };
 
-export type ChatRoomDocument = ChatRoom & Document;
+export type ChatRoomDocument = ChatRoom & Document<string, unknown, ChatRoom>;
 
 export const CHATROOM_SCHEMA = 'ChatRoom';
 

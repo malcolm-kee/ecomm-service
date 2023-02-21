@@ -73,7 +73,7 @@ export class JobService {
       applicantUserId: userId,
     });
 
-    return createdApplication.populate('job').execPopulate();
+    return (await createdApplication.populate('job')).save();
   }
 
   getJobApplications(filter: { job?: string; applicantUserId: string }) {

@@ -74,8 +74,10 @@ export class ChatService {
       throw new NotFoundException();
     }
 
+    const doc = room.toJSON();
+
     return {
-      ...room.toJSON(),
+      ...doc,
       participants: await Promise.all(
         room.participantUserIds.map((userId) =>
           this.userService.getPublicDetails(userId)
@@ -136,7 +138,7 @@ export class ChatService {
 
   async updateMessage(roomId: string, msg: ChatMessage & { id: string }) {
     await this.chatRoomSchema
-      .update(
+      .updateOne(
         {
           _id: roomId,
           messages: {
@@ -153,7 +155,7 @@ export class ChatService {
         }
       )
       .then((res) => {
-        if (res.ok !== 1 && res.nModified !== 1) {
+        if (res.matchedCount !== 1 && res.modifiedCount !== 1) {
           throw new NotFoundException();
         }
       });
