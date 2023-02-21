@@ -1,6 +1,7 @@
 import imagemin from 'imagemin';
-import request from 'request';
+import { Buffer } from 'node:buffer';
 import sharp, { Sharp } from 'sharp';
+import { request } from 'undici';
 import { isUrl } from './lib/is-url';
 import { GenerateImageOption } from './type';
 
@@ -10,20 +11,14 @@ const imageminWebp = require('imagemin-webp');
 export function getSharp(imagePath: string) {
   return new Promise<Sharp>((fulfill, reject) => {
     if (isUrl(imagePath)) {
-      request({ url: imagePath, encoding: null }, function afterRequest(
-        err,
-        _,
-        bodyBuffer: Buffer
-      ) {
-        if (err) {
-          console.error(`Error downloading image: ${imagePath}`);
-          return reject(err);
-        }
-
-        const newSharp = sharp(bodyBuffer);
-
-        return fulfill(newSharp);
-      });
+      request(imagePath)
+        .then((res) => res.body.arrayBuffer())
+        .then((imageArrBuffer) => {
+          const buffer = Buffer.from(imageArrBuffer);
+          const newSharp = sharp(buffer);
+          return fulfill(newSharp);
+        })
+        .catch(reject);
     } else {
       const newSharp = sharp(imagePath);
       return fulfill(newSharp);
@@ -32,7 +27,7 @@ export function getSharp(imagePath: string) {
 }
 
 function compressJpg(pipeline: Sharp, { quality = 30 } = {}) {
-  return pipeline.toBuffer().then(sharpBuffer =>
+  return pipeline.toBuffer().then((sharpBuffer) =>
     imagemin.buffer(sharpBuffer, {
       plugins: [
         imageminMozjpeg({
@@ -45,7 +40,7 @@ function compressJpg(pipeline: Sharp, { quality = 30 } = {}) {
 }
 
 function compressWebp(pipeline: Sharp, { quality = 5 } = {}) {
-  return pipeline.toBuffer().then(sharpBuffer =>
+  return pipeline.toBuffer().then((sharpBuffer) =>
     imagemin.buffer(sharpBuffer, {
       plugins: [imageminWebp({ quality })],
     })
@@ -54,7 +49,14 @@ function compressWebp(pipeline: Sharp, { quality = 5 } = {}) {
 
 export async function generateImage(
   img: Sharp,
-  { width, height, format, blur = false, fit = 'contain', position }: GenerateImageOption
+  {
+    width,
+    height,
+    format,
+    blur = false,
+    fit = 'contain',
+    position,
+  }: GenerateImageOption
 ) {
   if (!blur) {
     const sharp = img.clone().resize(width, height, {
@@ -82,7 +84,8 @@ export async function generateImage(
     kernel: 'cubic',
   });
 
-  const compressedBuffer = format === 'jpg' ? await compressJpg(sharp) : await compressWebp(sharp);
+  const compressedBuffer =
+    format === 'jpg' ? await compressJpg(sharp) : await compressWebp(sharp);
 
   return {
     width,

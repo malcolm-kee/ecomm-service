@@ -7,8 +7,8 @@ RUN corepack prepare pnpm@7.27.0 --activate && corepack enable
 RUN mkdir /app
 WORKDIR /app
 
-ENV MONGOMS_DOWNLOAD_URL https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-debian10-4.4.17.tgz
-ENV MONGOMS_VERSION 4.4.17
+# ENV MONGOMS_DOWNLOAD_URL https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-debian10-4.2.14.tgz
+# ENV MONGOMS_VERSION 4.2.14
 ENV MONGOMS_DOWNLOAD_DIR /app/mongodb-binaries
 
 COPY pnpm-lock.yaml .
@@ -41,8 +41,8 @@ RUN corepack prepare pnpm@7.27.0 --activate && corepack enable
 RUN mkdir /app
 WORKDIR /app
 
-ENV MONGOMS_DOWNLOAD_URL https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-debian10-4.4.17.tgz
-ENV MONGOMS_VERSION 4.4.17
+# ENV MONGOMS_DOWNLOAD_URL https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-debian10-4.2.14.tgz
+# ENV MONGOMS_VERSION 4.2.14
 
 COPY pnpm-lock.yaml .
 
@@ -56,6 +56,8 @@ RUN pnpm install --prod --offline
 
 FROM node:16
 
+RUN apt-get install libcurl4
+
 WORKDIR /app
 
 COPY seed /app/seed
@@ -67,7 +69,8 @@ COPY --from=deps /app/node_modules /app/node_modules
 
 ENV NODE_ENV production
 ENV MONGOMS_DOWNLOAD_DIR /app/mongodb-binaries
-ENV MONGOMS_DOWNLOAD_URL https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-debian10-4.4.17.tgz
-ENV MONGOMS_VERSION 4.4.17
+# ENV MONGOMS_DOWNLOAD_URL https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-debian10-4.2.14.tgz
+# ENV MONGOMS_VERSION 4.2.14
+ENV MONGOMS_DEBUG 1
 
 CMD ["npm", "start"]
