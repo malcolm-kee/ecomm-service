@@ -6,7 +6,7 @@ function createUserProfile(): User {
   const firstName = faker.name.firstName();
   const lastName = faker.name.lastName();
   return {
-    id: Types.ObjectId(),
+    id: new Types.ObjectId(),
     name: `${firstName} ${lastName}`,
     email: faker.internet.email(firstName, lastName),
     joinedDate: faker.date.past().getTime(),
@@ -18,7 +18,7 @@ function createUserProfile(): User {
 export function createUserDb(userCount: number) {
   const users: User[] = [
     {
-      id: Types.ObjectId(),
+      id: new Types.ObjectId(),
       name: 'Test User',
       email: 'test@shopit.com',
       joinedDate: faker.date.past().getTime(),

@@ -1,4 +1,5 @@
-import { HttpService, Injectable } from '@nestjs/common';
+import { HttpService } from '@nestjs/axios';
+import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { zip } from 'rxjs';

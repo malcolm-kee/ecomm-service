@@ -1,4 +1,4 @@
-import { Document } from 'mongoose';
+import type { Document, Schema, Types } from 'mongoose';
 
 export interface MovieBase {
   adult: boolean;
@@ -23,7 +23,7 @@ export interface Movie extends MovieBase {
 }
 
 export interface MovieComment {
-  movie: string;
+  movie: Types.ObjectId;
   userName: string;
   userId: string;
   content: string;
