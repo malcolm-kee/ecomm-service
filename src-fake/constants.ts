@@ -12,10 +12,13 @@ export const numOfUsers = isDev ? 5 : 100;
 export const numOfProducts = isDev ? 2 : 50;
 export const numOfListings = 30;
 export const numOfJobs = isDev ? 2 : 100;
-const APP_NAME = process.env.HEROKU_APP_NAME;
+const HEROKU_APP_NAME = process.env.HEROKU_APP_NAME;
+const FLY_APP_NAME = process.env.FLY_APP_NAME;
 const PORT = process.env.PORT || 3000;
-const app_baseurl = APP_NAME
-  ? `https://${APP_NAME}.herokuapp.com`
+const app_baseurl = HEROKU_APP_NAME
+  ? `https://${HEROKU_APP_NAME}.herokuapp.com`
+  : FLY_APP_NAME
+  ? `https://${FLY_APP_NAME}.fly.dev`
   : `http://localhost:${PORT}`;
 export const imagePublicPath = `${app_baseurl}/images/`;
 

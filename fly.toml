@@ -10,6 +10,9 @@ processes = []
 [experimental]
   auto_rollback = true
 
+[build.args]
+  FLY_APP_NAME = "ecomm-service"
+
 [[services]]
   internal_port = 3000
   processes = ["app"]

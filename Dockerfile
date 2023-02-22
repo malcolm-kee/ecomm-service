@@ -11,6 +11,8 @@ WORKDIR /app
 # ENV MONGOMS_VERSION 4.2.14
 ENV MONGOMS_DOWNLOAD_DIR /app/mongodb-binaries
 
+ARG FLY_APP_NAME
+
 COPY pnpm-lock.yaml .
 
 RUN pnpm fetch
