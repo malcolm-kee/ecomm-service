@@ -1,4 +1,4 @@
-import faker from 'faker';
+import { faker } from '@faker-js/faker';
 import { Comment, Product, User } from './type';
 
 function getCommentCount() {

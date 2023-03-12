@@ -11,7 +11,7 @@ export interface ImageData {
 }
 
 export interface Product {
-  id: number;
+  id: number | string;
   name: string;
   descriptions: string[];
   image: string;
@@ -37,7 +37,7 @@ export interface User {
 }
 
 export interface Comment {
-  productId: number;
+  productId: number | string;
   userName: string;
   content: string;
   createdOn: number;
@@ -77,7 +77,7 @@ export interface JobPosting {
 }
 
 export interface ProductDto extends Product {
-  related: number[];
+  related: Array<number | string>;
   images: ProductImageInfo | null;
   smallImagePath: string | null;
 }
@@ -89,11 +89,11 @@ export const ItemConditionEnum = [
   'used_fair',
 ] as const;
 
-export type ItemCondition = typeof ItemConditionEnum[number];
+export type ItemCondition = (typeof ItemConditionEnum)[number];
 
 export const ItemAvailabilityEnum = ['in-stock', 'single-item'] as const;
 
-export type ItemAvailability = typeof ItemAvailabilityEnum[number];
+export type ItemAvailability = (typeof ItemAvailabilityEnum)[number];
 
 export interface MarketingplaceListing {
   title: string;

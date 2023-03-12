@@ -1,4 +1,4 @@
-import faker from 'faker';
+import { faker } from '@faker-js/faker';
 import _ from 'lodash';
 import path from 'path';
 import { imageOutputFolder, imagePublicPath, numOfProducts } from './constants';
@@ -20,16 +20,16 @@ function getProductImage() {
   function getImage(id: number) {
     switch (id) {
       case 0:
-        return `https://placeimg.com/700/700/people`;
+        return faker.image.people(700, 700, true);
 
       case 1:
-        return `https://placeimg.com/700/700/tech`;
+        return faker.image.technics(700, 700, true);
 
       case 2:
         return `https://source.unsplash.com/random/700x700`;
 
       default:
-        return `https://placeimg.com/700/700/nature`;
+        return faker.image.nature(700, 700, true);
     }
   }
 

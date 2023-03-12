@@ -1,7 +1,7 @@
+import { faker } from '@faker-js/faker';
+import _ from 'lodash';
 import jobPostings from './jobs.json';
 import { JobPosting } from './type';
-import faker from 'faker';
-import _ from 'lodash';
 
 const DEPARTMENTS = [
   'Engineering',
