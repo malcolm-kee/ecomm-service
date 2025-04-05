@@ -1,8 +1,8 @@
-FROM node:16 as builder
+FROM node:20 as builder
 
 RUN apt-get install libcurl4
 
-RUN corepack prepare pnpm@7.27.0 --activate && corepack enable
+RUN corepack prepare pnpm@9.15.4 --activate && corepack enable
 
 RUN mkdir /app
 WORKDIR /app
