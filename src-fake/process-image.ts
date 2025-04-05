@@ -1,12 +1,8 @@
-import imagemin from 'imagemin';
 import { Buffer } from 'node:buffer';
 import sharp, { Sharp } from 'sharp';
 import { request } from 'undici';
 import { isUrl } from './lib/is-url';
 import { GenerateImageOption } from './type';
-
-const imageminMozjpeg = require('imagemin-mozjpeg');
-const imageminWebp = require('imagemin-webp');
 
 export function getSharp(imagePath: string) {
   return new Promise<Sharp>((fulfill, reject) => {
@@ -24,27 +20,6 @@ export function getSharp(imagePath: string) {
       return fulfill(newSharp);
     }
   });
-}
-
-function compressJpg(pipeline: Sharp, { quality = 30 } = {}) {
-  return pipeline.toBuffer().then((sharpBuffer) =>
-    imagemin.buffer(sharpBuffer, {
-      plugins: [
-        imageminMozjpeg({
-          quality,
-          progressive: true,
-        }),
-      ],
-    })
-  );
-}
-
-function compressWebp(pipeline: Sharp, { quality = 5 } = {}) {
-  return pipeline.toBuffer().then((sharpBuffer) =>
-    imagemin.buffer(sharpBuffer, {
-      plugins: [imageminWebp({ quality })],
-    })
-  );
 }
 
 export async function generateImage(
@@ -94,4 +69,21 @@ export async function generateImage(
     blur,
     buffer: compressedBuffer,
   };
+
+  function compressJpg(pipeline: Sharp, { quality = 30 } = {}) {
+    return pipeline
+      .jpeg({
+        quality,
+        progressive: true,
+      })
+      .toBuffer();
+  }
+
+  function compressWebp(pipeline: Sharp, { quality = 5 } = {}) {
+    return pipeline
+      .webp({
+        quality,
+      })
+      .toBuffer();
+  }
 }

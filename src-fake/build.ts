@@ -1,10 +1,11 @@
 require('dotenv').config();
 
 import { once } from 'events';
-import fs from 'fs';
-import mkdirp from 'mkdirp';
-import path from 'path';
-import rimraf from 'rimraf';
+import fs from 'node:fs';
+import path from 'node:path';
+import { rimraf } from 'rimraf';
+import { mkdirp } from 'mkdirp';
+
 import {
   imageOutputFolder,
   numOfJobs,
@@ -31,21 +32,10 @@ import {
 
 const fsys = fs.promises;
 
-function clean() {
-  return new Promise(function (fulfill, reject) {
-    rimraf(outputFolder, function afterRimraf(rimrafErr) {
-      if (rimrafErr) {
-        console.error('rimraf error');
-        return reject(rimrafErr);
-      }
-      mkdirp(outputFolder)
-        .then(fulfill)
-        .catch((mkdirErr) => {
-          console.error('create build folder error');
-          reject(mkdirErr);
-        });
-    });
-  });
+async function clean() {
+  await rimraf(outputFolder);
+
+  await mkdirp(outputFolder);
 }
 
 async function setupPublicFolder() {

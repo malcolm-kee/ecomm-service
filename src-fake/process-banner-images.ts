@@ -1,4 +1,4 @@
-import glob from 'glob';
+import { glob } from 'glob';
 import { imageOutputFolder, imagePublicPath } from './constants';
 import { ImageProcessor } from './image-processor';
 import { BannerInfo, GenerateImageOption } from './type';
@@ -34,43 +34,40 @@ const bannerImageOptions: GenerateImageOption[] = [
   },
 ];
 
-export function processBannerImages(imgProcessor: ImageProcessor): Promise<BannerInfo[]> {
-  return new Promise((fulfill, reject) => {
-    const result: BannerInfo[] = [];
+export async function processBannerImages(
+  imgProcessor: ImageProcessor
+): Promise<BannerInfo[]> {
+  const files = await glob(__dirname + '/../images/banner**.jpg');
+  const result: BannerInfo[] = [];
 
-    glob(__dirname + '/../images/banner**.jpg', function afterGlob(error, files) {
-      if (error) return reject(error);
+  for (let index = 0; index < files.length; index++) {
+    const bannerImgPath = files[index];
+    const bannerInfo: BannerInfo = {};
 
-      for (let index = 0; index < files.length; index++) {
-        const bannerImgPath = files[index];
-        const bannerInfo: BannerInfo = {};
+    bannerImageOptions.forEach((option) => {
+      const imgName = `banner-${index}.${option.height}x${option.width}.${option.format}`;
 
-        bannerImageOptions.forEach(option => {
-          const imgName = `banner-${index}.${option.height}x${option.width}.${option.format}`;
+      const blurImgName = `banner-${index}-blur.${option.height}x${option.width}.${option.format}`;
 
-          const blurImgName = `banner-${index}-blur.${option.height}x${option.width}.${option.format}`;
+      imgProcessor.addImage({
+        imagePath: bannerImgPath,
+        outputPath: `${imageOutputFolder}/${imgName}`,
+        option,
+      });
+      imgProcessor.addImage({
+        imagePath: bannerImgPath,
+        outputPath: `${imageOutputFolder}/${blurImgName}`,
+        option: {
+          ...option,
+          blur: true,
+        },
+      });
 
-          imgProcessor.addImage({
-            imagePath: bannerImgPath,
-            outputPath: `${imageOutputFolder}/${imgName}`,
-            option,
-          });
-          imgProcessor.addImage({
-            imagePath: bannerImgPath,
-            outputPath: `${imageOutputFolder}/${blurImgName}`,
-            option: {
-              ...option,
-              blur: true,
-            },
-          });
-
-          bannerInfo[option.width] = `${imagePublicPath}${imgName}`;
-          bannerInfo[`${option.width}Blur`] = `${imagePublicPath}${blurImgName}`;
-        });
-        result.push(bannerInfo);
-      }
-
-      fulfill(result);
+      bannerInfo[option.width] = `${imagePublicPath}${imgName}`;
+      bannerInfo[`${option.width}Blur`] = `${imagePublicPath}${blurImgName}`;
     });
-  });
+    result.push(bannerInfo);
+  }
+
+  return result;
 }

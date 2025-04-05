@@ -30,9 +30,10 @@ export interface MovieComment {
   rating: number;
 }
 
-export type MovieDocument = Movie & Document;
+export type MovieDocument = Movie & Document<string, unknown, Movie>;
 
-export type MovieCommentDocument = MovieComment & Document;
+export type MovieCommentDocument = MovieComment &
+  Document<string, unknown, MovieComment>;
 
 export const MOVIE_SCHEMA = 'Movie';
 

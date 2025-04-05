@@ -3,15 +3,15 @@ import { Types } from 'mongoose';
 import { User } from './type';
 
 function createUserProfile(): User {
-  const firstName = faker.name.firstName();
-  const lastName = faker.name.lastName();
+  const firstName = faker.person.firstName();
+  const lastName = faker.person.lastName();
   return {
     id: new Types.ObjectId(),
     name: `${firstName} ${lastName}`,
-    email: faker.internet.email(firstName, lastName),
+    email: faker.internet.email({ firstName, lastName }),
     joinedDate: faker.date.past().getTime(),
     avatar: faker.image.avatar(),
-    password: faker.internet.password(10),
+    password: faker.internet.password({ length: 10 }),
   };
 }
 

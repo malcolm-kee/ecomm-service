@@ -9,10 +9,9 @@ import { products } from './products';
 import { Product, ProductDto, ProductImageInfo } from './type';
 
 function getRandomInteger(max: number) {
-  return faker.datatype.number({
+  return faker.number.int({
     max,
     min: 0,
-    precision: 1,
   });
 }
 
@@ -20,16 +19,16 @@ function getProductImage() {
   function getImage(id: number) {
     switch (id) {
       case 0:
-        return faker.image.people(700, 700, true);
+        return faker.image.personPortrait({ size: 512 });
 
       case 1:
-        return faker.image.technics(700, 700, true);
+        return faker.image.urlLoremFlickr({ width: 700, height: 700 });
 
       case 2:
         return `https://source.unsplash.com/random/700x700`;
 
       default:
-        return faker.image.nature(700, 700, true);
+        return faker.image.urlPicsumPhotos({ width: 700, height: 700 });
     }
   }
 

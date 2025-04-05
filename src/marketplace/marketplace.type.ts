@@ -7,11 +7,11 @@ export const ItemConditionEnum = [
   'used_fair',
 ] as const;
 
-export type ItemCondition = typeof ItemConditionEnum[number];
+export type ItemCondition = (typeof ItemConditionEnum)[number];
 
 export const ItemAvailabilityEnum = ['in-stock', 'single-item'] as const;
 
-export type ItemAvailability = typeof ItemAvailabilityEnum[number];
+export type ItemAvailability = (typeof ItemAvailabilityEnum)[number];
 
 export type MarketplaceListing = {
   title: string;
@@ -24,7 +24,8 @@ export type MarketplaceListing = {
   numOfStock?: number;
 };
 
-export type MarketplaceListingDocument = MarketplaceListing & Document;
+export type MarketplaceListingDocument = MarketplaceListing &
+  Document<string, unknown, MarketplaceListing>;
 
 export const MARKETPLACE_LISTING_SCHEMA = 'MarketplaceListing';
 

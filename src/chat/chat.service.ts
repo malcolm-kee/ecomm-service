@@ -58,12 +58,16 @@ export class ChatService {
         }
       )
       .then((rooms) =>
-        rooms.map((room: ChatRoomDocument & DocumentDto) => ({
-          _id: room._id,
-          roomType: room.roomType,
-          createdAt: room.createdAt,
-          updatedAt: room.updatedAt,
-        }))
+        rooms.map((_room: any) => {
+          const room = _room as ChatRoomDocument & DocumentDto;
+
+          return {
+            _id: room._id,
+            roomType: room.roomType,
+            createdAt: room.createdAt,
+            updatedAt: room.updatedAt,
+          };
+        })
       );
   }
 

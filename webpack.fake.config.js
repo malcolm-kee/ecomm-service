@@ -7,7 +7,7 @@ const WebpackSourceMapSupport = require('webpack-source-map-support');
  */
 module.exports = {
   entry: path.resolve(__dirname, 'src-fake', 'build'),
-  mode: 'production',
+  mode: 'development',
   output: {
     path: path.resolve(__dirname, 'dist-fake'),
     filename: 'build.js',

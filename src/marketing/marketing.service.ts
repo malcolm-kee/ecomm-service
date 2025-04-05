@@ -37,6 +37,6 @@ export class MarketingService {
   }
 
   deleteOneData(id: string) {
-    return this.dataModelSchema.findByIdAndRemove(id).exec();
+    return this.dataModelSchema.findByIdAndDelete(id).exec();
   }
 }
