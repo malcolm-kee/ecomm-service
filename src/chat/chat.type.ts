@@ -5,7 +5,8 @@ export type ChatMessage = {
   senderId: string;
 };
 
-export type ChatMessageDoc = ChatMessage & Document;
+export type ChatMessageDoc = ChatMessage &
+  Document<string, unknown, ChatMessage>;
 
 export const ChatRoomTypes = ['global', '1-to-1', 'group'] as const;
 

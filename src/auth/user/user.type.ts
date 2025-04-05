@@ -13,4 +13,4 @@ export type UserPublicDetails = Pick<UserData, 'name' | 'avatar'> & {
   _id: string;
 };
 
-export type UserDocument = UserData & Document;
+export type UserDocument = UserData & Document<string, unknown, UserData>;

@@ -7,7 +7,7 @@ export const JobLevelEnum = [
   'manager',
 ] as const;
 
-export type JobLevel = typeof JobLevelEnum[number];
+export type JobLevel = (typeof JobLevelEnum)[number];
 
 export type Job = {
   title: string;
@@ -19,7 +19,7 @@ export type Job = {
   headcount: number;
 };
 
-export type JobDocument = Job & Document;
+export type JobDocument = Job & Document<string, unknown, Job>;
 
 export const JOB_SCHEMA = 'Job';
 
@@ -33,6 +33,6 @@ export type JobApplicationDocument = {
   applicantUserId: string;
   job: string;
   linkedinUrl: string;
-} & Document;
+} & Document<string, unknown, JobApplication>;
 
 export const JOB_APPLICATION_SCHEMA = 'JobApplication';

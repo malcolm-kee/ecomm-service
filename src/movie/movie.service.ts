@@ -128,7 +128,7 @@ export class MovieService {
 
   deleteMovieComment(commentId: string, userId: string) {
     return this.movieCommentModel
-      .findOneAndRemove({
+      .findOneAndDelete({
         _id: commentId,
         userId,
       })

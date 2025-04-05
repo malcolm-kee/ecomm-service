@@ -7,6 +7,7 @@ export type DataModel = {
   };
 };
 
-export type DataModelDocument = DataModel & Document;
+export type DataModelDocument = DataModel &
+  Document<string, unknown, DataModel>;
 
 export const MARKETING_DATA_MODEL_SCHEMA = 'MarketingDataModel';

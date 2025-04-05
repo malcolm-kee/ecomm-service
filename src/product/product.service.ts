@@ -71,6 +71,6 @@ export class ProductService {
   }
 
   deleteOne(id: string) {
-    return this.productModel.findByIdAndRemove(id).exec();
+    return this.productModel.findByIdAndDelete(id).exec();
   }
 }

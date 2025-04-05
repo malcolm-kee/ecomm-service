@@ -65,7 +65,7 @@ export class MarketplaceService {
   }
 
   deleteOne(id: string) {
-    return this.listingModel.findByIdAndRemove(id).exec();
+    return this.listingModel.findByIdAndDelete(id).exec();
   }
 
   async getCartItems(userId: string) {

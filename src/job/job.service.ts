@@ -63,7 +63,7 @@ export class JobService {
   }
 
   deleteOne(id: string) {
-    return this.jobModel.findByIdAndRemove(id).exec();
+    return this.jobModel.findByIdAndDelete(id).exec();
   }
 
   async createJobApplication(data: CreateJobApplicationDto, userId: string) {
@@ -82,7 +82,7 @@ export class JobService {
 
   deleteJobApplication(applicationId: string, userId: string) {
     return this.jobApplicationModel
-      .findOneAndRemove({
+      .findOneAndDelete({
         _id: applicationId,
         applicantUserId: userId,
       })
