@@ -1,25 +1,30 @@
-import { Buffer } from 'node:buffer';
-import sharp, { Sharp } from 'sharp';
+import fs from 'node:fs';
+import os from 'node:os';
+import path from 'node:path';
+import type { Sharp } from 'sharp';
+import sharp from 'sharp';
 import { request } from 'undici';
 import { isUrl } from './lib/is-url';
 import { GenerateImageOption } from './type';
 
-export function getSharp(imagePath: string) {
-  return new Promise<Sharp>((fulfill, reject) => {
-    if (isUrl(imagePath)) {
-      request(imagePath)
-        .then((res) => res.body.arrayBuffer())
-        .then((imageArrBuffer) => {
-          const buffer = Buffer.from(imageArrBuffer);
-          const newSharp = sharp(buffer);
-          return fulfill(newSharp);
-        })
-        .catch(reject);
-    } else {
-      const newSharp = sharp(imagePath);
-      return fulfill(newSharp);
-    }
-  });
+export function getSharp(imagePath: string): Promise<Sharp> {
+  if (isUrl(imagePath)) {
+    const tempFile = path.join(os.tmpdir(), `temp-${Date.now()}.jpg`);
+    const writeStream = fs.createWriteStream(tempFile);
+
+    return request(imagePath).then((res) => {
+      res.body.pipe(writeStream);
+      return new Promise<Sharp>((resolve, reject) => {
+        writeStream.on('finish', () => {
+          const newSharp = sharp(tempFile);
+          resolve(newSharp);
+        });
+        writeStream.on('error', reject);
+      });
+    });
+  }
+
+  return Promise.resolve(sharp(imagePath));
 }
 
 export async function generateImage(

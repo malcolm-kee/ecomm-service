@@ -21,7 +21,7 @@ COPY package.json .
 
 RUN pnpm install --offline
 
-COPY webpack.fake.config.js .
+COPY tsup.config.ts .
 COPY index.html .
 COPY images /app/images
 COPY src-fake /app/src-fake
@@ -36,9 +36,9 @@ RUN pnpm run build
 
 #######################################################################
 
-FROM node:16 as deps
+FROM node:20 as deps
 
-RUN corepack prepare pnpm@7.27.0 --activate && corepack enable
+RUN corepack prepare pnpm@9.15.4 --activate && corepack enable
 
 RUN mkdir /app
 WORKDIR /app
@@ -56,7 +56,7 @@ RUN pnpm install --prod --offline
 
 #######################################################################
 
-FROM node:16
+FROM node:20
 
 RUN apt-get install libcurl4
 

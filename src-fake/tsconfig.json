@@ -3,8 +3,6 @@
     "module": "Node16",
     "declaration": false,
     "removeComments": true,
-    "emitDecoratorMetadata": true,
-    "experimentalDecorators": true,
     "target": "es2017",
     "sourceMap": true,
     "baseUrl": "./",
@@ -12,5 +10,6 @@
     "resolveJsonModule": true,
     "esModuleInterop": true,
     "skipLibCheck": true
-  }
+  },
+  "include": ["./**/*.ts", "./**/*.tsx"]
 }

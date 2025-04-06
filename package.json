@@ -19,13 +19,15 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
-    "build:fake": "webpack --config webpack.fake.config.js",
-    "dev:fake": "webpack --config webpack.fake.config.js --watch",
+    "build:fake": "tsup",
+    "dev:fake": "tsup --watch",
+    "typecheck:fake": "tsc --noEmit --project src-fake",
     "generate": "node dist-fake/build.js",
     "generate:local": "cross-env IS_DEV=true node dist-fake/build.js",
     "seed": "node seed",
     "heroku-postbuild": "npm run build && npm run build:fake && npm run generate"
   },
+  "packageManager": "pnpm@9.15.4",
   "dependencies": {
     "@nestjs/axios": "^4.0.0",
     "@nestjs/common": "^11.0.13",
@@ -91,19 +93,12 @@
     "node-fetch": "^3.3.2",
     "prettier": "^3.5.3",
     "sharp": "^0.34.0",
-    "source-map-support": "~0.5.21",
     "supertest": "^7.1.0",
     "ts-jest": "^29.3.1",
-    "ts-loader": "^9.5.2",
-    "ts-node": "^10.9.2",
-    "tsconfig-paths": "^4.2.0",
+    "tsup": "^8.4.0",
     "typescript": "^5.8.3",
     "undici": "^7.7.0",
-    "unsplash-js": "^7.0.19",
-    "webpack": "^5.98.0",
-    "webpack-cli": "^6.0.1",
-    "webpack-node-externals": "^3.0.0",
-    "webpack-source-map-support": "^2.0.1"
+    "unsplash-js": "^7.0.19"
   },
   "jest": {
     "moduleFileExtensions": [

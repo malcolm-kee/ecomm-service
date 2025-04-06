@@ -3,6 +3,7 @@
 /dist-fake
 /node_modules
 /build
+*.tsbuildinfo
 
 # env
 .env

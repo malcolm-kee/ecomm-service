@@ -21,11 +21,11 @@ function getProductImage() {
       case 0:
         return faker.image.personPortrait({ size: 512 });
 
-      case 1:
-        return faker.image.urlLoremFlickr({ width: 700, height: 700 });
-
       case 2:
-        return `https://source.unsplash.com/random/700x700`;
+        return faker.image.url({
+          width: 700,
+          height: 700,
+        });
 
       default:
         return faker.image.urlPicsumPhotos({ width: 700, height: 700 });
