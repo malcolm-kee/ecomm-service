@@ -13,7 +13,7 @@ import { MarketingModule } from './marketing/marketing.module';
 import { MarketplaceModule } from './marketplace/marketplace.module';
 import { MovieModule } from './movie/movie.module';
 import { ProductModule } from './product/product.module';
-
+import { UserModule } from './user/user.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -44,6 +44,7 @@ import { ProductModule } from './product/product.module';
     ChatModule,
     MarketplaceModule,
     MovieModule,
+    UserModule,
   ],
 })
 export class AppModule {}

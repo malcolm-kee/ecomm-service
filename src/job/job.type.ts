@@ -19,7 +19,11 @@ export type Job = {
   headcount: number;
 };
 
-export type JobDocument = Job & Document<string, unknown, Job>;
+export type JobDocument = Job &
+  Document<string, unknown, Job> & {
+    createdAt: string;
+    updatedAt: string;
+  };
 
 export const JOB_SCHEMA = 'Job';
 
@@ -33,6 +37,8 @@ export type JobApplicationDocument = {
   applicantUserId: string;
   job: string;
   linkedinUrl: string;
+  createdAt: string;
+  updatedAt: string;
 } & Document<string, unknown, JobApplication>;
 
 export const JOB_APPLICATION_SCHEMA = 'JobApplication';

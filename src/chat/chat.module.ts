@@ -1,6 +1,6 @@
 import { forwardRef, Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
-import { AuthModule } from 'auth/auth.module';
+import { UserModule } from '../user/user.module';
 import { ChatController } from './chat.controller';
 import { ChatGateway } from './chat.gateway';
 import { ChatRoomSchema } from './chat.schema';
@@ -15,7 +15,7 @@ import { CHATROOM_SCHEMA } from './chat.type';
         schema: ChatRoomSchema,
       },
     ]),
-    forwardRef(() => AuthModule),
+    forwardRef(() => UserModule),
   ],
   providers: [ChatService, ChatGateway],
   exports: [ChatService],

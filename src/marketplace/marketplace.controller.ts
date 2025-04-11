@@ -7,15 +7,10 @@ import {
   Patch,
   Query,
   Post,
-  UseGuards,
 } from '@nestjs/common';
-import {
-  ApiBearerAuth,
-  ApiOperation,
-  ApiResponse,
-  ApiTags,
-} from '@nestjs/swagger';
-import { JwtAuthGuard, User } from 'auth';
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { User } from '../auth';
+import { WithGuard } from '../shared/with-guard.decorator';
 import { Pagination } from 'shared/pagination.decorator';
 import {
   MarketplaceListingDto,
@@ -113,8 +108,7 @@ export class MarketplaceController {
     type: MarketplaceCartItemDto,
     isArray: true,
   })
-  @ApiBearerAuth()
-  @UseGuards(JwtAuthGuard)
+  @WithGuard()
   @Get('cart/items')
   listCartItems(@User('userId') userId: string) {
     return this.listingService.getCartItems(userId);
@@ -124,8 +118,7 @@ export class MarketplaceController {
     summary: 'Add listing to cart',
     operationId: 'addCartItem',
   })
-  @ApiBearerAuth()
-  @UseGuards(JwtAuthGuard)
+  @WithGuard()
   @Post('cart/items')
   addItemToCart(
     @Body() body: AddMarketplaceCartItemDto,
@@ -138,8 +131,7 @@ export class MarketplaceController {
     summary: 'Remove item from cart',
     operationId: 'removeCartItem',
   })
-  @ApiBearerAuth()
-  @UseGuards(JwtAuthGuard)
+  @WithGuard()
   @Delete('cart/items/:listingId')
   removeItemFromCart(
     @Param('listingId') listingId: string,

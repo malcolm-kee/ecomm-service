@@ -1,18 +1,18 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { PaginateModel } from 'mongoose';
 import {
-  ProductDocument,
   PRODUCT_SCHEMA,
   Product,
   ProductComment,
+  ProductDocument,
 } from './product.type';
 
 @Injectable()
 export class ProductService {
   constructor(
     @InjectModel(PRODUCT_SCHEMA)
-    private readonly productModel: Model<ProductDocument>
+    private readonly productModel: PaginateModel<ProductDocument>
   ) {}
 
   create(product: Product) {
@@ -68,6 +68,25 @@ export class ProductService {
         }
       )
       .exec();
+  }
+
+  getManyPaginated({
+    page = 1,
+    limit = 10,
+  }: {
+    page?: number | string;
+    limit?: number | string;
+  } = {}) {
+    return this.productModel.paginate(
+      {},
+      {
+        sort: {
+          createdAt: -1,
+        },
+        limit: Number(limit),
+        page: Number(page),
+      }
+    );
   }
 
   deleteOne(id: string) {

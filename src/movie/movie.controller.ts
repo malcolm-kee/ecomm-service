@@ -7,15 +7,10 @@ import {
   Post,
   Query,
   UnauthorizedException,
-  UseGuards,
 } from '@nestjs/common';
-import {
-  ApiBearerAuth,
-  ApiOperation,
-  ApiResponse,
-  ApiTags,
-} from '@nestjs/swagger';
-import { JwtAuthGuard, User } from 'auth';
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { User } from '../auth';
+import { WithGuard } from '../shared/with-guard.decorator';
 import { Pagination } from '../shared/pagination.decorator';
 import { CreateMovieCommentDto, MovieCommentDto, MovieDto } from './movie.dto';
 import { MovieService } from './movie.service';
@@ -78,8 +73,7 @@ export class MovieController {
     status: 201,
     type: MovieCommentDto,
   })
-  @ApiBearerAuth()
-  @UseGuards(JwtAuthGuard)
+  @WithGuard()
   @Post('comment')
   createComment(
     @Body() body: CreateMovieCommentDto,
@@ -102,8 +96,7 @@ export class MovieController {
     status: 200,
     type: MovieCommentDto,
   })
-  @ApiBearerAuth()
-  @UseGuards(JwtAuthGuard)
+  @WithGuard()
   @Delete('comment/:id')
   async deleteComment(@Param('id') id: string, @User('userId') userId: string) {
     const removedComment = await this.movieService.deleteMovieComment(

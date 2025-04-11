@@ -10,6 +10,12 @@ import {
   Query,
 } from '@nestjs/common';
 import { ApiOperation, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
+
+import {
+  ApiPaginatedResponse,
+  Pagination,
+} from '../shared/pagination.decorator';
+import { PaginatedDto } from '../shared/pagination.dto';
 import {
   CreateProductDto,
   ProductResponse,
@@ -25,7 +31,7 @@ export class ProductController {
 
   @ApiOperation({
     summary: 'Get list of available products',
-    operationId: 'listProducts',
+    operationId: 'getProducts',
   })
   @ApiQuery({
     name: 'before',
@@ -48,6 +54,23 @@ export class ProductController {
   ) {
     return this.productService.getMany({
       before,
+      limit,
+    });
+  }
+
+  @ApiOperation({
+    summary: 'List available products with pagination',
+    operationId: 'listProducts',
+  })
+  @Pagination()
+  @ApiPaginatedResponse(ProductResponse)
+  @Get('list')
+  listProducts(
+    @Query('page') page?: number,
+    @Query('limit') limit?: number
+  ): Promise<PaginatedDto<ProductResponse>> {
+    return this.productService.getManyPaginated({
+      page,
       limit,
     });
   }

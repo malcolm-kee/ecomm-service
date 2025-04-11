@@ -1,5 +1,5 @@
 import { Schema } from 'mongoose';
-import { USER_SCHEMA_NAME } from '../auth';
+import { USER_SCHEMA_NAME } from '../user/user.type';
 import { ChatMessage, ChatRoom, ChatRoomTypes } from './chat.type';
 
 export const ChatMessageSchema = new Schema<ChatMessage>(

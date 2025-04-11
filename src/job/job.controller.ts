@@ -9,7 +9,12 @@ import {
   Query,
 } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { Pagination } from '../shared/pagination.decorator';
+
+import {
+  ApiPaginatedResponse,
+  Pagination,
+} from '../shared/pagination.decorator';
+import { PaginatedDto } from '../shared/pagination.dto';
 import { JobDto, JobResponse, UpdateJobDto } from './job.dto';
 import { JobService } from './job.service';
 
@@ -20,7 +25,7 @@ export class JobController {
 
   @ApiOperation({
     summary: 'Get list of available jobs',
-    operationId: 'listJobs',
+    operationId: 'getJobs',
   })
   @ApiResponse({
     status: 200,
@@ -41,6 +46,23 @@ export class JobController {
     }
 
     return this.jobService.getMany({
+      page,
+      limit,
+    });
+  }
+
+  @ApiOperation({
+    summary: 'List available jobs with pagination',
+    operationId: 'listJobs',
+  })
+  @Pagination()
+  @ApiPaginatedResponse(JobResponse)
+  @Get('list')
+  listJobs(
+    @Query('page') page?: number,
+    @Query('limit') limit?: number
+  ): Promise<PaginatedDto<JobResponse>> {
+    return this.jobService.getManyPaginated({
       page,
       limit,
     });

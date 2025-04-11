@@ -1,4 +1,5 @@
 import { Schema } from 'mongoose';
+import paginate from 'mongoose-paginate-v2';
 import { Product, ProductComment } from './product.type';
 
 export const ProductCommentSchema = new Schema<ProductComment>(
@@ -38,3 +39,5 @@ export const ProductSchema = new Schema<Product>(
     timestamps: true,
   }
 );
+
+ProductSchema.plugin(paginate);

@@ -5,16 +5,16 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { UserPublicDetails } from 'auth';
-import { UserService } from 'auth/user/user.service';
 import { Model, Types } from 'mongoose';
 import { DocumentDto } from '../constants';
+import { UserService } from '../user/user.service';
+import { UserPublicDetails } from '../user/user.type';
 import {
   ChatMessage,
   ChatMessageDoc,
   ChatRoom,
-  ChatRoomDocument,
   CHATROOM_SCHEMA,
+  ChatRoomDocument,
 } from './chat.type';
 
 @Injectable()

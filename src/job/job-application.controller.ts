@@ -6,16 +6,10 @@ import {
   Param,
   Post,
   Query,
-  UseGuards,
 } from '@nestjs/common';
-import {
-  ApiBearerAuth,
-  ApiOperation,
-  ApiQuery,
-  ApiResponse,
-  ApiTags,
-} from '@nestjs/swagger';
-import { JwtAuthGuard, User } from 'auth';
+import { ApiOperation, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { User } from '../auth';
+import { WithGuard } from '../shared/with-guard.decorator';
 import { CreateJobApplicationDto, JobApplicationDto } from './job.dto';
 import { JobService } from './job.service';
 
@@ -38,8 +32,7 @@ export class JobApplicationController {
     type: JobApplicationDto,
     isArray: true,
   })
-  @ApiBearerAuth()
-  @UseGuards(JwtAuthGuard)
+  @WithGuard()
   @Get()
   listJobApplications(
     @Query('jobId') jobId: string,
@@ -67,8 +60,7 @@ export class JobApplicationController {
     status: 201,
     type: JobApplicationDto,
   })
-  @ApiBearerAuth()
-  @UseGuards(JwtAuthGuard)
+  @WithGuard()
   @Post('')
   createJobApplication(
     @Body() body: CreateJobApplicationDto,
@@ -85,8 +77,7 @@ export class JobApplicationController {
     status: 200,
     type: JobApplicationDto,
   })
-  @ApiBearerAuth()
-  @UseGuards(JwtAuthGuard)
+  @WithGuard()
   @Delete(':id')
   deleteJobApplication(
     @Param('id') id: string,

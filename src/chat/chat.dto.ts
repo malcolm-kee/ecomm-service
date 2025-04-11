@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { UserPublicDetails } from 'auth';
 import { IsIn, IsMongoId, IsNotEmpty, IsString } from 'class-validator';
 import { DocumentDto } from '../constants';
+import { UserPublicDetails } from '../user/user.type';
 import {
   ChatMessage,
   ChatRoom,
@@ -21,8 +21,10 @@ export class ChatMessageDto extends MessageDto implements ChatMessage {
   senderId: string;
 }
 
-export class ChatMessageResponseDto extends ChatMessageDto
-  implements DocumentDto {
+export class ChatMessageResponseDto
+  extends ChatMessageDto
+  implements DocumentDto
+{
   _id: string;
   __v: number;
   createdAt: string;

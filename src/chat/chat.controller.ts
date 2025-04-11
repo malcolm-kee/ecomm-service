@@ -7,16 +7,10 @@ import {
   Post,
   Put,
   Request,
-  UseGuards,
 } from '@nestjs/common';
-import {
-  ApiBearerAuth,
-  ApiOperation,
-  ApiResponse,
-  ApiTags,
-  PickType,
-} from '@nestjs/swagger';
-import { AuthenticatedRequest, JwtAuthGuard } from 'auth';
+import { ApiOperation, ApiResponse, ApiTags, PickType } from '@nestjs/swagger';
+import type { AuthenticatedRequest } from '../auth';
+import { WithGuard } from '../shared/with-guard.decorator';
 import {
   ChatMessageResponseDto,
   ChatRoomDto,
@@ -44,8 +38,7 @@ export class ChatController {
     ]),
     isArray: true,
   })
-  @ApiBearerAuth()
-  @UseGuards(JwtAuthGuard)
+  @WithGuard()
   @Get()
   getJoinRooms(@Request() req: AuthenticatedRequest) {
     return this.chatService.getRoomsForUser(req.user.userId);
@@ -85,8 +78,7 @@ export class ChatController {
     status: 201,
     type: ChatRoomResponseDto,
   })
-  @ApiBearerAuth()
-  @UseGuards(JwtAuthGuard)
+  @WithGuard()
   @Post('room')
   addRoom(@Body() body: ChatRoomDto, @Request() req: AuthenticatedRequest) {
     const participantUserIds = body.participantUserIds.includes(req.user.userId)
@@ -106,8 +98,7 @@ export class ChatController {
     status: 200,
     type: ChatRoomResponseDto,
   })
-  @ApiBearerAuth()
-  @UseGuards(JwtAuthGuard)
+  @WithGuard()
   @HttpCode(200)
   @Post('room/:roomId/join')
   joinRoom(
@@ -125,8 +116,7 @@ export class ChatController {
     status: 201,
     type: ChatMessageResponseDto,
   })
-  @ApiBearerAuth()
-  @UseGuards(JwtAuthGuard)
+  @WithGuard()
   @Post('room/:roomId/msg')
   sendMessage(
     @Param('roomId') roomId: string,
@@ -147,8 +137,7 @@ export class ChatController {
     status: 200,
     type: ChatMessageResponseDto,
   })
-  @ApiBearerAuth()
-  @UseGuards(JwtAuthGuard)
+  @WithGuard()
   @Put('room/:roomId/msg/:msgId')
   updateMessage(
     @Param('roomId') roomId: string,

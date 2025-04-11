@@ -1,4 +1,5 @@
 import { Schema } from 'mongoose';
+import paginate from 'mongoose-paginate-v2';
 import { Job, JobLevelEnum, JOB_SCHEMA } from './job.type';
 
 export const JobSchema = new Schema<Job>(
@@ -16,6 +17,8 @@ export const JobSchema = new Schema<Job>(
   },
   { timestamps: true }
 );
+
+JobSchema.plugin(paginate);
 
 export const JobApplicationSchema = new Schema(
   {

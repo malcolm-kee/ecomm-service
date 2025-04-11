@@ -27,6 +27,10 @@ export type Product = {
   comments: ProductComment[];
 };
 
-export type ProductDocument = Product & Document<string, unknown, Product>;
+export type ProductDocument = Product &
+  Document<string, unknown, Product> & {
+    createdAt: string;
+    updatedAt: string;
+  };
 
 export const PRODUCT_SCHEMA = 'Product';

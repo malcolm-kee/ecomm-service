@@ -1,19 +1,19 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import type { Model, PaginateModel } from 'mongoose';
 import { CreateJobApplicationDto } from './job.dto';
 import {
   Job,
-  JobApplicationDocument,
-  JobDocument,
   JOB_APPLICATION_SCHEMA,
   JOB_SCHEMA,
+  JobApplicationDocument,
+  JobDocument,
 } from './job.type';
 
 @Injectable()
 export class JobService {
   constructor(
-    @InjectModel(JOB_SCHEMA) private jobModel: Model<JobDocument>,
+    @InjectModel(JOB_SCHEMA) private jobModel: PaginateModel<JobDocument>,
     @InjectModel(JOB_APPLICATION_SCHEMA)
     private jobApplicationModel: Model<JobApplicationDocument>
   ) {}
@@ -56,6 +56,25 @@ export class JobService {
         }
       )
       .exec();
+  }
+
+  getManyPaginated({
+    page = 1,
+    limit = 10,
+  }: {
+    page?: number;
+    limit?: number | string;
+  } = {}) {
+    return this.jobModel.paginate(
+      {},
+      {
+        sort: {
+          createdAt: -1,
+        },
+        limit: Number(limit),
+        page: Number(page),
+      }
+    );
   }
 
   updateOne(id: string, changes: Partial<Job>) {

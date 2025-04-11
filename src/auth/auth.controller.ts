@@ -7,13 +7,7 @@ import {
   Request,
   UseGuards,
 } from '@nestjs/common';
-import {
-  ApiBearerAuth,
-  ApiBody,
-  ApiOperation,
-  ApiResponse,
-  ApiTags,
-} from '@nestjs/swagger';
+import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import {
   LoginDto,
   LoginResponse,
@@ -22,7 +16,7 @@ import {
   UserProfile,
 } from './auth.dto';
 import { AuthService } from './auth.service';
-import { JwtAuthGuard } from './jwt.auth.guard';
+import { WithGuard } from '../shared/with-guard.decorator';
 import { AuthenticatedRequest } from './jwt.type';
 import { LocalAuthGuard } from './local.auth.guard';
 
@@ -67,12 +61,11 @@ export class AuthController {
     summary: 'Get logged-in user profile',
     operationId: 'getProfile',
   })
-  @ApiBearerAuth()
   @ApiResponse({
     status: 200,
     type: UserProfile,
   })
-  @UseGuards(JwtAuthGuard)
+  @WithGuard()
   @Get('whoami')
   getProfile(@Request() req: AuthenticatedRequest) {
     return req.user;

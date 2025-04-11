@@ -33,7 +33,7 @@ export class RegisterDto {
   password: string;
 
   @ApiProperty({
-    example: 'http://github.com/malcolm-kee.png',
+    example: 'https://github.com/malcolm-kee.png',
   })
   @IsString()
   @ValidateIf((dto) => dto.avatar !== '')

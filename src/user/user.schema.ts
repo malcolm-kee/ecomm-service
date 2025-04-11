@@ -1,4 +1,5 @@
 import * as mongoose from 'mongoose';
+import paginate from 'mongoose-paginate-v2';
 import { UserDocument } from './user.type';
 
 export const UserSchema = new mongoose.Schema<UserDocument>({
@@ -10,3 +11,5 @@ export const UserSchema = new mongoose.Schema<UserDocument>({
   password: String,
   avatar: String,
 });
+
+UserSchema.plugin(paginate);

@@ -7,6 +7,7 @@ export type UserData = {
   email: string;
   password: string;
   avatar: string;
+  _id: string;
 };
 
 export type UserPublicDetails = Pick<UserData, 'name' | 'avatar'> & {
