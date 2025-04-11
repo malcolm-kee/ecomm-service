@@ -28,7 +28,6 @@ export class FileController {
   })
   @ApiConsumes('multipart/form-data')
   @ApiBody({
-    type: 'multipart/form-data',
     required: true,
     schema: {
       type: 'object',

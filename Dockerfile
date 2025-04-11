@@ -1,4 +1,6 @@
-FROM node:20 as builder
+ARG NODE_VERSION=20
+
+FROM node:${NODE_VERSION} as builder
 
 RUN apt-get install libcurl4
 
@@ -36,7 +38,7 @@ RUN pnpm run build
 
 #######################################################################
 
-FROM node:20 as deps
+FROM node:${NODE_VERSION} as deps
 
 RUN corepack prepare pnpm@9.15.4 --activate && corepack enable
 
@@ -56,7 +58,7 @@ RUN pnpm install --prod --offline
 
 #######################################################################
 
-FROM node:20
+FROM node:${NODE_VERSION}
 
 RUN apt-get install libcurl4
 

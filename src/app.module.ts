@@ -24,7 +24,13 @@ import { ProductModule } from './product/product.module';
     }),
     MongooseModule.forRootAsync({
       useFactory: async () => {
-        const db = await MongoMemoryServer.create();
+        const db = await MongoMemoryServer.create({
+          instance: {
+            dbName: 'ecomm-service',
+            port: 37813,
+            storageEngine: 'wiredTiger',
+          },
+        });
         return {
           uri: db.getUri(),
         };

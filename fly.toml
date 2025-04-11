@@ -7,6 +7,9 @@ processes = []
 
 [env]
 
+[[vm]]
+  size = "shared-cpu-2x"
+
 [experimental]
   auto_rollback = true
 
