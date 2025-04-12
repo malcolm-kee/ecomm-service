@@ -3,10 +3,11 @@ import {
   IsIn,
   IsInt,
   IsNumber,
+  IsOptional,
   IsString,
   Min,
-  IsOptional,
 } from 'class-validator';
+
 import { DocumentDto } from '../constants';
 import { Job, JobLevel, JobLevelEnum } from './job.type';
 

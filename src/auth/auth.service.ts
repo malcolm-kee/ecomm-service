@@ -1,5 +1,7 @@
 import { ConflictException, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
+import { omit } from 'lodash';
+
 import { CreateUserDto } from '../user/user.dto';
 import { UserService } from '../user/user.service';
 import { UserData } from '../user/user.type';
@@ -26,14 +28,13 @@ export class AuthService {
     const user = await this.userService.findOne(email);
 
     if (user && user.password === password) {
-      const { password, ...result } = user.toObject();
-      return result;
+      return omit(user.toObject(), ['password']);
     }
 
     return null;
   }
 
-  async login(user: UserData & { _id: string }) {
+  login(user: UserData & { _id: string }) {
     const payload = {
       name: user.name,
       email: user.email,

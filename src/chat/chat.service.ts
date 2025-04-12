@@ -1,19 +1,19 @@
 import {
-  forwardRef,
   Inject,
   Injectable,
   NotFoundException,
+  forwardRef,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
-import { DocumentDto } from '../constants';
+
 import { UserService } from '../user/user.service';
 import { UserPublicDetails } from '../user/user.type';
 import {
+  CHATROOM_SCHEMA,
   ChatMessage,
   ChatMessageDoc,
   ChatRoom,
-  CHATROOM_SCHEMA,
   ChatRoomDocument,
 } from './chat.type';
 
@@ -58,8 +58,8 @@ export class ChatService {
         }
       )
       .then((rooms) =>
-        rooms.map((_room: any) => {
-          const room = _room as ChatRoomDocument & DocumentDto;
+        rooms.map((room) => {
+          // const room = _room as ChatRoomDocument & DocumentDto;
 
           return {
             _id: room._id,

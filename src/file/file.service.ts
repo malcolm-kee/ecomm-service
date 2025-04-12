@@ -1,9 +1,10 @@
 import { Injectable } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { promises as fs } from 'fs';
 import * as db from 'mime-db';
 import * as path from 'path';
-import { UploadFileInfo, UPLOAD_FOLDER } from './file.type';
-import { ConfigService } from '@nestjs/config';
+
+import { UPLOAD_FOLDER, UploadFileInfo } from './file.type';
 
 @Injectable()
 export class FileService {
@@ -29,11 +30,14 @@ export class FileService {
   }
 
   private get baseUrl(): string {
-    const APP_NAME = this.configService.get('HEROKU_APP_NAME');
-    const PORT = this.configService.get('PORT') || 3000;
+    const FLY_APP_NAME = this.configService.get<string>('FLY_APP_NAME');
+    const APP_NAME = this.configService.get<string>('HEROKU_APP_NAME');
+    const PORT = this.configService.get<number>('PORT') || 3000;
 
-    return APP_NAME
-      ? `https://${APP_NAME}.herokuapp.com`
-      : `http://localhost:${PORT}`;
+    return FLY_APP_NAME
+      ? `https://${FLY_APP_NAME}.fly.dev`
+      : APP_NAME
+        ? `https://${APP_NAME}.herokuapp.com`
+        : `http://localhost:${PORT}`;
   }
 }

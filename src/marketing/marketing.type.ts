@@ -3,7 +3,7 @@ import { Document } from 'mongoose';
 export type DataModel = {
   type: string;
   data: {
-    [fieldName: string]: any;
+    [fieldName: string]: unknown;
   };
 };
 

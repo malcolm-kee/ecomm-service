@@ -4,6 +4,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { MongoMemoryServer } from 'mongodb-memory-server';
 import * as path from 'path';
+
 import { AuthModule } from './auth/auth.module';
 import { ChatModule } from './chat/chat.module';
 import { PUBLIC_PATH } from './constants';
@@ -14,6 +15,7 @@ import { MarketplaceModule } from './marketplace/marketplace.module';
 import { MovieModule } from './movie/movie.module';
 import { ProductModule } from './product/product.module';
 import { UserModule } from './user/user.module';
+
 @Module({
   imports: [
     ConfigModule.forRoot({

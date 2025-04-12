@@ -1,11 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import type { Model, PaginateModel } from 'mongoose';
+
 import { CreateJobApplicationDto } from './job.dto';
 import {
-  Job,
   JOB_APPLICATION_SCHEMA,
   JOB_SCHEMA,
+  Job,
   JobApplicationDocument,
   JobDocument,
 } from './job.type';

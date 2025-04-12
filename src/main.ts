@@ -3,6 +3,7 @@ import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
 import { WsAdapter } from '@nestjs/platform-ws';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+
 import { AppModule } from './app.module';
 
 async function bootstrap() {
@@ -28,4 +29,5 @@ async function bootstrap() {
 
   await app.listen(PORT, () => console.log(`Service started at port ${PORT}`));
 }
-bootstrap();
+
+void bootstrap();

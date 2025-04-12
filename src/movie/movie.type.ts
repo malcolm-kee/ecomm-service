@@ -1,4 +1,4 @@
-import type { Document, Schema, Types } from 'mongoose';
+import type { Document, Types } from 'mongoose';
 
 export interface MovieBase {
   adult: boolean;

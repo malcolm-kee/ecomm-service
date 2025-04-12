@@ -7,6 +7,7 @@ import {
 import { IncomingMessage } from 'http';
 import * as url from 'url';
 import WebSocket from 'ws';
+
 import { ChatService } from './chat.service';
 import { ChatMessage, MessagePayload } from './chat.type';
 
@@ -38,15 +39,16 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
       });
     }
 
-    client.on('message', async (rawData) => {
+    client.on('message', (rawData) => {
       const message = this.parseMsg(rawData);
       if (message) {
-        const savedMessage = await this.chatService.addMessage(roomId, message);
-        this.broadcast(roomId, {
-          type: 'User',
-          message: message.content,
-          data: savedMessage,
-        });
+        void this.chatService.addMessage(roomId, message).then((savedMessage) =>
+          this.broadcast(roomId, {
+            type: 'User',
+            message: message.content,
+            data: savedMessage,
+          })
+        );
       }
     });
   }
@@ -71,9 +73,9 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
       if (roomId) {
         if (Array.isArray(roomId)) {
-          roomId.forEach((id) => this.registerClient(id, client));
+          roomId.forEach((id) => void this.registerClient(id, client));
         } else {
-          this.registerClient(roomId, client);
+          void this.registerClient(roomId, client);
         }
       }
     }
@@ -110,7 +112,7 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
   private parseMsg(message: WebSocket.Data): ChatMessage | undefined {
     try {
-      return JSON.parse(message as string);
+      return JSON.parse(message as string) as ChatMessage;
     } catch (err) {
       console.error(err);
     }

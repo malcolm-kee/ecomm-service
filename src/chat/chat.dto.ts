@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsIn, IsMongoId, IsNotEmpty, IsString } from 'class-validator';
+
 import { DocumentDto } from '../constants';
 import { UserPublicDetails } from '../user/user.type';
 import {
@@ -35,7 +36,7 @@ export class ChatRoomDto implements ChatRoom {
   @ApiProperty({
     enum: ChatRoomTypes,
   })
-  @IsIn(ChatRoomTypes as any)
+  @IsIn(ChatRoomTypes)
   roomType: ChatRoomType;
 
   @IsString({

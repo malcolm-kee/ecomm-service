@@ -8,15 +8,15 @@ import {
   Post,
   Query,
 } from '@nestjs/common';
-
 import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
+
 import {
   ApiPaginatedResponse,
   Pagination,
 } from '../shared/pagination.decorator';
-import type { PaginatedDto } from '../shared/pagination.dto';
+import { PaginatedDto } from '../shared/pagination.dto';
 import { WithGuard } from '../shared/with-guard.decorator';
-import { UserDto, type CreateUserDto, type UpdateUserDto } from './user.dto';
+import { CreateUserDto, UpdateUserDto, UserDto } from './user.dto';
 import { UserService } from './user.service';
 
 @ApiTags('user')

@@ -1,6 +1,7 @@
 import { Schema } from 'mongoose';
 import paginate from 'mongoose-paginate-v2';
-import { Job, JobLevelEnum, JOB_SCHEMA } from './job.type';
+
+import { JOB_SCHEMA, Job, JobLevelEnum } from './job.type';
 
 export const JobSchema = new Schema<Job>(
   {

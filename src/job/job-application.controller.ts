@@ -8,6 +8,7 @@ import {
   Query,
 } from '@nestjs/common';
 import { ApiOperation, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
+
 import { User } from '../auth';
 import { WithGuard } from '../shared/with-guard.decorator';
 import { CreateJobApplicationDto, JobApplicationDto } from './job.dto';

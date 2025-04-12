@@ -1,5 +1,6 @@
-import { IsString, IsNotEmpty, IsObject } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
+import { IsNotEmpty, IsObject, IsString } from 'class-validator';
+
 import { DataModel } from './marketing.type';
 
 export class MarketingDataDto implements DataModel {
@@ -12,10 +13,12 @@ export class MarketingDataDto implements DataModel {
 
   @ApiProperty({
     description: 'Data',
+    type: 'object',
+    properties: {},
   })
   @IsObject()
   data: {
-    [field: string]: any;
+    [field: string]: unknown;
   };
 }
 

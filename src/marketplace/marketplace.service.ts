@@ -1,12 +1,13 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
+
 import {
+  MARKETPLACE_CART_SCHEMA,
+  MARKETPLACE_LISTING_SCHEMA,
   MarketplaceCartDocument,
   MarketplaceListing,
   MarketplaceListingDocument,
-  MARKETPLACE_CART_SCHEMA,
-  MARKETPLACE_LISTING_SCHEMA,
 } from './marketplace.type';
 
 @Injectable()
@@ -120,7 +121,7 @@ export class MarketplaceService {
       currentCart.items.push({
         listing: data.listingId,
         quantity: data.quantity,
-      } as any);
+      });
       return currentCart.save();
     }
   }

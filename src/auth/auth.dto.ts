@@ -7,6 +7,7 @@ import {
   MinLength,
   ValidateIf,
 } from 'class-validator';
+
 import { JwtPayload } from './jwt.type';
 
 export class RegisterDto {
@@ -36,7 +37,7 @@ export class RegisterDto {
     example: 'https://github.com/malcolm-kee.png',
   })
   @IsString()
-  @ValidateIf((dto) => dto.avatar !== '')
+  @ValidateIf((dto: RegisterDto) => dto.avatar !== '')
   @IsUrl()
   avatar: string;
 }

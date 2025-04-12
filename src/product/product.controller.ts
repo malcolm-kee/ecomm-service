@@ -18,9 +18,9 @@ import {
 import { PaginatedDto } from '../shared/pagination.dto';
 import {
   CreateProductDto,
+  ProductCommentDto,
   ProductResponse,
   UpdateProductDto,
-  ProductCommentDto,
 } from './product.dto';
 import { ProductService } from './product.service';
 
@@ -170,7 +170,7 @@ export class ProductController {
   })
   @Delete(':id')
   async deleteProduct(@Param('id') id: string) {
-    const deletedProduct = this.productService.deleteOne(id);
+    const deletedProduct = await this.productService.deleteOne(id);
 
     if (!deletedProduct) {
       throw new NotFoundException();

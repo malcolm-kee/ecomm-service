@@ -8,6 +8,9 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import type { Request as ExpressRequest } from 'express';
+import { WithGuard } from '../shared/with-guard.decorator';
+import { UserData } from '../user/user.type';
 import {
   LoginDto,
   LoginResponse,
@@ -16,7 +19,6 @@ import {
   UserProfile,
 } from './auth.dto';
 import { AuthService } from './auth.service';
-import { WithGuard } from '../shared/with-guard.decorator';
 import { AuthenticatedRequest } from './jwt.type';
 import { LocalAuthGuard } from './local.auth.guard';
 
@@ -53,7 +55,7 @@ export class AuthController {
   @UseGuards(LocalAuthGuard)
   @Post('login')
   @HttpCode(200)
-  login(@Request() req) {
+  login(@Request() req: LoginRequest) {
     return this.service.login(req.user);
   }
 
@@ -71,3 +73,7 @@ export class AuthController {
     return req.user;
   }
 }
+
+type LoginRequest = ExpressRequest & {
+  user: UserData & { _id: string };
+};

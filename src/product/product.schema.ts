@@ -1,5 +1,6 @@
 import { Schema } from 'mongoose';
 import paginate from 'mongoose-paginate-v2';
+
 import { Product, ProductComment } from './product.type';
 
 export const ProductCommentSchema = new Schema<ProductComment>(

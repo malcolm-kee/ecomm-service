@@ -3,11 +3,12 @@ import {
   Controller,
   Delete,
   Get,
+  NotFoundException,
   Param,
   Post,
-  NotFoundException,
 } from '@nestjs/common';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
+
 import { MarketingDataDto, MarketingDataResponse } from './marketing.dto';
 import { MarketingService } from './marketing.service';
 
@@ -64,7 +65,7 @@ export class MarketingController {
   })
   @Delete('record/:id')
   async removeData(@Param('id') id: string) {
-    const deletedData = this.service.deleteOneData(id);
+    const deletedData = await this.service.deleteOneData(id);
 
     if (!deletedData) {
       throw new NotFoundException();

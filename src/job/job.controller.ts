@@ -37,12 +37,10 @@ export class JobController {
   async getJobs(
     @Query('page') page?: number,
     @Query('limit') limit?: number,
-    @Query() query?: any
+    @Query('delay') delay?: number
   ) {
-    const delay = query.delay;
-
     if (delay) {
-      await new Promise((f) => setTimeout(f, delay));
+      await new Promise((f) => setTimeout(f, Number(delay)));
     }
 
     return this.jobService.getMany({

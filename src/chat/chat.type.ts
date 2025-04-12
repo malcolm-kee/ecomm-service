@@ -1,4 +1,5 @@
 import { Document } from 'mongoose';
+import { DocumentDto } from '../constants';
 
 export type ChatMessage = {
   content: string;
@@ -18,7 +19,9 @@ export type ChatRoom = {
   participantUserIds: string[];
 };
 
-export type ChatRoomDocument = ChatRoom & Document<string, unknown, ChatRoom>;
+export type ChatRoomDocument = ChatRoom &
+  Document<string, unknown, ChatRoom> &
+  DocumentDto;
 
 export const CHATROOM_SCHEMA = 'ChatRoom';
 

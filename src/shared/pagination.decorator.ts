@@ -1,10 +1,11 @@
-import { applyDecorators, Type } from '@nestjs/common';
+import { Type, applyDecorators } from '@nestjs/common';
 import {
   ApiExtraModels,
   ApiOkResponse,
   ApiQuery,
   getSchemaPath,
 } from '@nestjs/swagger';
+
 import { PaginatedDto } from './pagination.dto';
 
 export function Pagination() {
@@ -22,7 +23,7 @@ export function Pagination() {
   );
 }
 
-export function ApiPaginatedResponse<Model extends Type<any>>(model: Model) {
+export function ApiPaginatedResponse<Model extends Type>(model: Model) {
   return applyDecorators(
     ApiExtraModels(PaginatedDto, model),
     ApiOkResponse({
