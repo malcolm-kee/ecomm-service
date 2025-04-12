@@ -9,7 +9,14 @@ import {
   Put,
   Query,
 } from '@nestjs/common';
-import { ApiOperation, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiNotFoundResponse,
+  ApiOkResponse,
+  ApiOperation,
+  ApiQuery,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 
 import {
   ApiPaginatedResponse,
@@ -42,8 +49,7 @@ export class ProductController {
     required: false,
     type: 'number',
   })
-  @ApiResponse({
-    status: 200,
+  @ApiOkResponse({
     type: ProductResponse,
     isArray: true,
   })
@@ -79,8 +85,7 @@ export class ProductController {
     summary: 'Get details of one product',
     operationId: 'getProduct',
   })
-  @ApiResponse({
-    status: 200,
+  @ApiOkResponse({
     type: ProductResponse,
   })
   @Get(':id')
@@ -105,13 +110,11 @@ export class ProductController {
     summary: 'Update a product',
     operationId: 'updateProduct',
   })
-  @ApiResponse({
-    status: 200,
+  @ApiOkResponse({
     type: ProductResponse,
     description: 'Product is updated successfully',
   })
-  @ApiResponse({
-    status: 404,
+  @ApiNotFoundResponse({
     description: 'No product found with the specified id',
   })
   @Put(':id')
@@ -137,8 +140,7 @@ export class ProductController {
     type: ProductResponse,
     description: 'Comment is added successfully',
   })
-  @ApiResponse({
-    status: 404,
+  @ApiNotFoundResponse({
     description: 'No product found with the specified id',
   })
   @Post('comment/:id')
@@ -159,13 +161,11 @@ export class ProductController {
     summary: 'Delete a product',
     operationId: 'deleteProduct',
   })
-  @ApiResponse({
-    status: 200,
+  @ApiOkResponse({
     type: ProductResponse,
     description: 'Product is deleted successfully',
   })
-  @ApiResponse({
-    status: 404,
+  @ApiNotFoundResponse({
     description: 'No product found with the specified id',
   })
   @Delete(':id')

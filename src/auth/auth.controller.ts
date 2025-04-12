@@ -7,8 +7,17 @@ import {
   Request,
   UseGuards,
 } from '@nestjs/common';
-import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBody,
+  ApiConflictResponse,
+  ApiOkResponse,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+  ApiUnauthorizedResponse,
+} from '@nestjs/swagger';
 import type { Request as ExpressRequest } from 'express';
+
 import { WithGuard } from '../shared/with-guard.decorator';
 import { UserData } from '../user/user.type';
 import {
@@ -35,6 +44,9 @@ export class AuthController {
     status: 201,
     type: RegisterResponse,
   })
+  @ApiConflictResponse({
+    description: 'Email already used',
+  })
   @Post('register')
   register(@Body() body: RegisterDto) {
     return this.service.createUser(body);
@@ -47,10 +59,12 @@ export class AuthController {
   @ApiBody({
     type: LoginDto,
   })
-  @ApiResponse({
-    status: 200,
+  @ApiOkResponse({
     type: LoginResponse,
     description: 'Login success',
+  })
+  @ApiUnauthorizedResponse({
+    description: 'Invalid credentials',
   })
   @UseGuards(LocalAuthGuard)
   @Post('login')
@@ -63,8 +77,7 @@ export class AuthController {
     summary: 'Get logged-in user profile',
     operationId: 'getProfile',
   })
-  @ApiResponse({
-    status: 200,
+  @ApiOkResponse({
     type: UserProfile,
   })
   @WithGuard()

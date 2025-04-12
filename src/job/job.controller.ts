@@ -8,7 +8,7 @@ import {
   Post,
   Query,
 } from '@nestjs/common';
-import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 
 import {
   ApiPaginatedResponse,
@@ -27,8 +27,7 @@ export class JobController {
     summary: 'Get list of available jobs',
     operationId: 'getJobs',
   })
-  @ApiResponse({
-    status: 200,
+  @ApiOkResponse({
     type: JobResponse,
     isArray: true,
   })
@@ -70,8 +69,7 @@ export class JobController {
     summary: 'Get details of one job',
     operationId: 'getJob',
   })
-  @ApiResponse({
-    status: 200,
+  @ApiOkResponse({
     type: JobResponse,
   })
   @Get(':id')
@@ -83,8 +81,7 @@ export class JobController {
     summary: 'Create a job',
     operationId: 'createJob',
   })
-  @ApiResponse({
-    status: 200,
+  @ApiOkResponse({
     type: JobResponse,
   })
   @Post()
@@ -96,8 +93,7 @@ export class JobController {
     summary: 'Update a job',
     operationId: 'updateJob',
   })
-  @ApiResponse({
-    status: 200,
+  @ApiOkResponse({
     type: JobResponse,
   })
   @Patch(':id')
@@ -109,8 +105,7 @@ export class JobController {
     summary: 'Delete a job',
     operationId: 'deleteJob',
   })
-  @ApiResponse({
-    status: 200,
+  @ApiOkResponse({
     type: JobResponse,
   })
   @Delete(':id')

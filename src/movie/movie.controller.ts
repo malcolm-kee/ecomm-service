@@ -8,10 +8,16 @@ import {
   Query,
   UnauthorizedException,
 } from '@nestjs/common';
-import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiOkResponse,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
+
 import { User } from '../auth';
-import { WithGuard } from '../shared/with-guard.decorator';
 import { Pagination } from '../shared/pagination.decorator';
+import { WithGuard } from '../shared/with-guard.decorator';
 import { CreateMovieCommentDto, MovieCommentDto, MovieDto } from './movie.dto';
 import { MovieService } from './movie.service';
 
@@ -24,8 +30,7 @@ export class MovieController {
     summary: 'Get list of movies',
     operationId: 'listMovies',
   })
-  @ApiResponse({
-    status: 200,
+  @ApiOkResponse({
     type: MovieDto,
     isArray: true,
   })
@@ -42,8 +47,7 @@ export class MovieController {
     summary: 'Get one movie',
     operationId: 'getMovie',
   })
-  @ApiResponse({
-    status: 200,
+  @ApiOkResponse({
     type: MovieDto,
   })
   @Get('movie/:movieId')
@@ -55,8 +59,7 @@ export class MovieController {
     summary: 'Get comments for a movie',
     operationId: 'listMovieComments',
   })
-  @ApiResponse({
-    status: 200,
+  @ApiOkResponse({
     type: MovieCommentDto,
     isArray: true,
   })
@@ -92,8 +95,7 @@ export class MovieController {
     description:
       'Note that you must be the owner of the comment (userId) to perform this action.',
   })
-  @ApiResponse({
-    status: 200,
+  @ApiOkResponse({
     type: MovieCommentDto,
   })
   @WithGuard()

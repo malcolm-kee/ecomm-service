@@ -7,7 +7,13 @@ import {
   Param,
   Post,
 } from '@nestjs/common';
-import { ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiNotFoundResponse,
+  ApiOkResponse,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 
 import { MarketingDataDto, MarketingDataResponse } from './marketing.dto';
 import { MarketingService } from './marketing.service';
@@ -17,8 +23,11 @@ import { MarketingService } from './marketing.service';
 export class MarketingController {
   constructor(private readonly service: MarketingService) {}
 
-  @ApiResponse({
-    status: 200,
+  @ApiOperation({
+    operationId: 'getMarketingDataByType',
+    summary: 'Get marketing data by type',
+  })
+  @ApiOkResponse({
     type: MarketingDataResponse,
     isArray: true,
   })
@@ -27,6 +36,10 @@ export class MarketingController {
     return this.service.getDataByType(type);
   }
 
+  @ApiOperation({
+    operationId: 'createMarketingData',
+    summary: 'Create marketing data',
+  })
   @ApiResponse({
     status: 201,
     type: MarketingDataResponse,
@@ -36,12 +49,14 @@ export class MarketingController {
     return this.service.createData(body);
   }
 
-  @ApiResponse({
-    status: 200,
+  @ApiOperation({
+    operationId: 'getMarketingDataById',
+    summary: 'Get marketing data by id',
+  })
+  @ApiOkResponse({
     type: MarketingDataResponse,
   })
-  @ApiResponse({
-    status: 404,
+  @ApiNotFoundResponse({
     description: 'No data with the specified id exists.',
   })
   @Get('record/:id')
@@ -55,12 +70,14 @@ export class MarketingController {
     return record;
   }
 
-  @ApiResponse({
-    status: 200,
+  @ApiOperation({
+    operationId: 'removeMarketingData',
+    summary: 'Remove marketing data',
+  })
+  @ApiOkResponse({
     type: MarketingDataResponse,
   })
-  @ApiResponse({
-    status: 404,
+  @ApiNotFoundResponse({
     description: 'No data with the specified id exists.',
   })
   @Delete('record/:id')

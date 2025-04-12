@@ -8,7 +8,13 @@ import {
   Put,
   Request,
 } from '@nestjs/common';
-import { ApiOperation, ApiResponse, ApiTags, PickType } from '@nestjs/swagger';
+import {
+  ApiOkResponse,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+  PickType,
+} from '@nestjs/swagger';
 
 import type { AuthenticatedRequest } from '../auth';
 import { WithGuard } from '../shared/with-guard.decorator';
@@ -29,8 +35,7 @@ export class ChatController {
     summary: 'Get all rooms that have been joined by logged-in user',
     operationId: 'listJoinedChatRooms',
   })
-  @ApiResponse({
-    status: 200,
+  @ApiOkResponse({
     type: PickType(ChatRoomResponseDto, [
       '_id',
       'roomType',
@@ -49,8 +54,7 @@ export class ChatController {
     summary: 'Get the global chat room that all user will be added to.',
     operationId: 'getGlobalChatRoom',
   })
-  @ApiResponse({
-    status: 200,
+  @ApiOkResponse({
     type: ChatRoomResponseDto,
   })
   @Get('room')
@@ -62,8 +66,7 @@ export class ChatController {
     summary: 'Get a chat room with a specific id.',
     operationId: 'getChatRoom',
   })
-  @ApiResponse({
-    status: 200,
+  @ApiOkResponse({
     type: ChatRoomResponseDto,
   })
   @Get('room/:id')
@@ -95,8 +98,7 @@ export class ChatController {
     summary: 'Join a chat room',
     operationId: 'jobChatRoom',
   })
-  @ApiResponse({
-    status: 200,
+  @ApiOkResponse({
     type: ChatRoomResponseDto,
   })
   @WithGuard()
@@ -134,8 +136,7 @@ export class ChatController {
     summary: 'Update a chat message',
     operationId: 'updateChatMessage',
   })
-  @ApiResponse({
-    status: 200,
+  @ApiOkResponse({
     type: ChatMessageResponseDto,
   })
   @WithGuard()

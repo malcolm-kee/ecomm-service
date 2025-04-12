@@ -5,19 +5,25 @@ import {
   Get,
   Param,
   Patch,
-  Query,
   Post,
+  Query,
 } from '@nestjs/common';
-import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiOkResponse,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
+import { Pagination } from 'shared/pagination.decorator';
+
 import { User } from '../auth';
 import { WithGuard } from '../shared/with-guard.decorator';
-import { Pagination } from 'shared/pagination.decorator';
 import {
+  AddMarketplaceCartItemDto,
+  MarketplaceCartItemDto,
   MarketplaceListingDto,
   MarketplaceListingResponse,
   UpdateMarketplaceListingDto,
-  AddMarketplaceCartItemDto,
-  MarketplaceCartItemDto,
 } from './marketplace.dto';
 import { MarketplaceService } from './marketplace.service';
 
@@ -30,8 +36,7 @@ export class MarketplaceController {
     summary: 'Get all listings in marketplace',
     operationId: 'listListings',
   })
-  @ApiResponse({
-    status: 200,
+  @ApiOkResponse({
     type: MarketplaceListingResponse,
     isArray: true,
   })
@@ -48,8 +53,7 @@ export class MarketplaceController {
     summary: 'Get details of one listing',
     operationId: 'getListing',
   })
-  @ApiResponse({
-    status: 200,
+  @ApiOkResponse({
     type: MarketplaceListingResponse,
   })
   @Get(':id')
@@ -74,8 +78,7 @@ export class MarketplaceController {
     summary: 'Update a listing',
     operationId: 'updateListing',
   })
-  @ApiResponse({
-    status: 200,
+  @ApiOkResponse({
     type: MarketplaceListingResponse,
   })
   @Patch(':id')
@@ -90,8 +93,7 @@ export class MarketplaceController {
     summary: 'Delete a listing',
     operationId: 'deleteListing',
   })
-  @ApiResponse({
-    status: 200,
+  @ApiOkResponse({
     type: MarketplaceListingResponse,
   })
   @Delete(':id')
@@ -103,8 +105,7 @@ export class MarketplaceController {
     summary: 'Get items in cart',
     operationId: 'listCartItems',
   })
-  @ApiResponse({
-    status: 200,
+  @ApiOkResponse({
     type: MarketplaceCartItemDto,
     isArray: true,
   })
