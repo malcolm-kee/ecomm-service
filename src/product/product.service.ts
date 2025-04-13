@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { PaginateModel } from 'mongoose';
 
+import { CreateProductDto } from './product.dto';
 import {
   PRODUCT_SCHEMA,
   Product,
@@ -16,8 +17,8 @@ export class ProductService {
     private readonly productModel: PaginateModel<ProductDocument>
   ) {}
 
-  create(product: Product) {
-    return this.productModel.create(product);
+  create(data: CreateProductDto) {
+    return this.productModel.create(data);
   }
 
   getOne(id: string) {

@@ -58,7 +58,7 @@ export class ProductController {
   getProducts(
     @Query('before') before?: string,
     @Query('limit') limit?: number
-  ) {
+  ): Promise<ProductResponse[]> {
     return this.productService.getMany({
       before,
       limit,
@@ -98,10 +98,7 @@ export class ProductController {
   @WithValidation()
   @Post()
   createProduct(@Body() body: CreateProductDto): Promise<ProductResponse> {
-    return this.productService.create({
-      comments: [],
-      ...body,
-    });
+    return this.productService.create(body);
   }
 
   @ApiOperation({
@@ -116,7 +113,7 @@ export class ProductController {
   async updateProduct(
     @Param('id') id: string,
     @Body() changes: UpdateProductDto
-  ) {
+  ): Promise<ProductResponse> {
     const updated = await this.productService.updateOne(id, changes);
 
     if (!updated) {

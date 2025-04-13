@@ -36,7 +36,10 @@ export class MovieController {
   })
   @Pagination()
   @Get()
-  getMovies(@Query('page') page?: number, @Query('limit') limit?: number) {
+  getMovies(
+    @Query('page') page?: number,
+    @Query('limit') limit?: number
+  ): Promise<Array<MovieDto>> {
     return this.movieService.getMovies({
       page,
       limit,

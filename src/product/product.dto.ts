@@ -44,10 +44,15 @@ export class CreateProductDto implements Omit<Product, 'comments'> {
   })
   price: string;
 
+  @ApiProperty({
+    required: false,
+    type: 'string',
+    description: '_id of related products',
+  })
   @IsMongoId({
     each: true,
   })
-  related: string[];
+  related: string[] = [];
 
   images: ProductImages;
 
@@ -56,7 +61,7 @@ export class CreateProductDto implements Omit<Product, 'comments'> {
     type: ProductCommentDto,
     required: false,
   })
-  comments?: ProductCommentDto[];
+  comments: ProductCommentDto[] = [];
 }
 
 export class UpdateProductDto extends PartialType(CreateProductDto) {}
