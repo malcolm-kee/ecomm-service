@@ -23,6 +23,7 @@ import {
   Pagination,
 } from '../shared/pagination.decorator';
 import { PaginatedDto } from '../shared/pagination.dto';
+import { WithValidation } from '../shared/with-validation.decorator';
 import {
   CreateProductDto,
   ProductCommentDto,
@@ -85,11 +86,8 @@ export class ProductController {
     summary: 'Get details of one product',
     operationId: 'getProduct',
   })
-  @ApiOkResponse({
-    type: ProductResponse,
-  })
   @Get(':id')
-  getOneProduct(@Param('id') id: string) {
+  getOneProduct(@Param('id') id: string): Promise<ProductResponse> {
     return this.productService.getOne(id);
   }
 
@@ -97,26 +95,23 @@ export class ProductController {
     summary: 'Create a product',
     operationId: 'createProduct',
   })
-  @ApiResponse({
-    status: 201,
-    type: ProductResponse,
-  })
+  @WithValidation()
   @Post()
-  createProduct(@Body() body: CreateProductDto) {
-    return this.productService.create(body);
+  createProduct(@Body() body: CreateProductDto): Promise<ProductResponse> {
+    return this.productService.create({
+      comments: [],
+      ...body,
+    });
   }
 
   @ApiOperation({
     summary: 'Update a product',
     operationId: 'updateProduct',
   })
-  @ApiOkResponse({
-    type: ProductResponse,
-    description: 'Product is updated successfully',
-  })
   @ApiNotFoundResponse({
     description: 'No product found with the specified id',
   })
+  @WithValidation()
   @Put(':id')
   async updateProduct(
     @Param('id') id: string,
@@ -143,6 +138,7 @@ export class ProductController {
   @ApiNotFoundResponse({
     description: 'No product found with the specified id',
   })
+  @WithValidation()
   @Post('comment/:id')
   async addProductComment(
     @Param('id') id: string,

@@ -15,7 +15,8 @@ import {
   Pagination,
 } from '../shared/pagination.decorator';
 import { PaginatedDto } from '../shared/pagination.dto';
-import { JobDto, JobResponse, UpdateJobDto } from './job.dto';
+import { WithValidation } from '../shared/with-validation.decorator';
+import { JobDto, JobResponseDto, UpdateJobDto } from './job.dto';
 import { JobService } from './job.service';
 
 @ApiTags('job')
@@ -28,7 +29,7 @@ export class JobController {
     operationId: 'getJobs',
   })
   @ApiOkResponse({
-    type: JobResponse,
+    type: JobResponseDto,
     isArray: true,
   })
   @Pagination()
@@ -53,12 +54,12 @@ export class JobController {
     operationId: 'listJobs',
   })
   @Pagination()
-  @ApiPaginatedResponse(JobResponse)
+  @ApiPaginatedResponse(JobResponseDto)
   @Get('list')
   listJobs(
     @Query('page') page?: number,
     @Query('limit') limit?: number
-  ): Promise<PaginatedDto<JobResponse>> {
+  ): Promise<PaginatedDto<JobResponseDto>> {
     return this.jobService.getManyPaginated({
       page,
       limit,
@@ -69,11 +70,8 @@ export class JobController {
     summary: 'Get details of one job',
     operationId: 'getJob',
   })
-  @ApiOkResponse({
-    type: JobResponse,
-  })
   @Get(':id')
-  getJob(@Param('id') id: string) {
+  getJob(@Param('id') id: string): Promise<JobResponseDto> {
     return this.jobService.getOne(id);
   }
 
@@ -81,11 +79,9 @@ export class JobController {
     summary: 'Create a job',
     operationId: 'createJob',
   })
-  @ApiOkResponse({
-    type: JobResponse,
-  })
+  @WithValidation()
   @Post()
-  createJob(@Body() body: JobDto) {
+  createJob(@Body() body: JobDto): Promise<JobResponseDto> {
     return this.jobService.create(body);
   }
 
@@ -93,11 +89,12 @@ export class JobController {
     summary: 'Update a job',
     operationId: 'updateJob',
   })
-  @ApiOkResponse({
-    type: JobResponse,
-  })
+  @WithValidation()
   @Patch(':id')
-  updateJob(@Param('id') id: string, @Body() body: UpdateJobDto) {
+  updateJob(
+    @Param('id') id: string,
+    @Body() body: UpdateJobDto
+  ): Promise<JobResponseDto> {
     return this.jobService.updateOne(id, body);
   }
 
@@ -105,11 +102,8 @@ export class JobController {
     summary: 'Delete a job',
     operationId: 'deleteJob',
   })
-  @ApiOkResponse({
-    type: JobResponse,
-  })
   @Delete(':id')
-  deleteJob(@Param('id') id: string) {
+  deleteJob(@Param('id') id: string): Promise<JobResponseDto> {
     return this.jobService.deleteOne(id);
   }
 }

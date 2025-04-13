@@ -1,16 +1,23 @@
 import { ApiProperty, PartialType } from '@nestjs/swagger';
-import { IsMongoId, IsNotEmpty, IsString } from 'class-validator';
+import { IsMongoId, IsNotEmpty, IsNumber, IsString } from 'class-validator';
 
 import { DocumentDto } from '../constants';
 import { Product, ProductComment, ProductImages } from './product.type';
 
 export class ProductCommentDto implements ProductComment {
+  @IsString()
+  @IsNotEmpty()
   userName: string;
+
+  @IsString()
+  @IsNotEmpty()
   content: string;
+
+  @IsNumber()
   rating: number;
 }
 
-export class CreateProductDto implements Product {
+export class CreateProductDto implements Omit<Product, 'comments'> {
   @ApiProperty({
     description: 'Product name',
     example: 'Awesome Mousetrap',
@@ -19,12 +26,16 @@ export class CreateProductDto implements Product {
   @IsNotEmpty()
   name: string;
 
+  @ApiProperty()
   descriptions: string[];
 
+  @ApiProperty()
   image: string;
 
+  @ApiProperty()
   department: string;
 
+  @ApiProperty()
   blurhash: string;
 
   @ApiProperty({
@@ -40,7 +51,12 @@ export class CreateProductDto implements Product {
 
   images: ProductImages;
 
-  comments: ProductCommentDto[];
+  @ApiProperty({
+    isArray: true,
+    type: ProductCommentDto,
+    required: false,
+  })
+  comments?: ProductCommentDto[];
 }
 
 export class UpdateProductDto extends PartialType(CreateProductDto) {}

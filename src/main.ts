@@ -1,4 +1,4 @@
-import { ValidationPipe } from '@nestjs/common';
+import { BadRequestException, ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
 import { WsAdapter } from '@nestjs/platform-ws';
@@ -18,7 +18,17 @@ async function bootstrap() {
     .addBearerAuth()
     .build();
 
-  app.useGlobalPipes(new ValidationPipe());
+  app.useGlobalPipes(
+    new ValidationPipe({
+      validationError: {
+        target: false,
+        value: false,
+      },
+      // we want to see details of the validation errors, such as
+      // the property and the constraints
+      exceptionFactory: (errors) => new BadRequestException(errors),
+    })
+  );
   app.enableCors();
   app.useWebSocketAdapter(new WsAdapter(app));
 

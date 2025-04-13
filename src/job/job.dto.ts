@@ -60,7 +60,7 @@ export class JobDto implements Job {
 
 export class UpdateJobDto extends PartialType(JobDto) {}
 
-export class JobResponse extends JobDto implements DocumentDto {
+export class JobResponseDto extends JobDto implements DocumentDto {
   @ApiProperty({
     description: 'Unique id for the job',
   })
@@ -79,7 +79,7 @@ export class CreateJobApplicationDto {
 }
 
 export class JobApplicationDto {
-  job: JobResponse;
+  job: JobResponseDto;
   @ApiProperty({
     example: 'https://www.linkedin.com/in/leehsienloong/',
   })

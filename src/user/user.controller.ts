@@ -8,7 +8,7 @@ import {
   Post,
   Query,
 } from '@nestjs/common';
-import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
 
 import {
   ApiPaginatedResponse,
@@ -16,6 +16,7 @@ import {
 } from '../shared/pagination.decorator';
 import { PaginatedDto } from '../shared/pagination.dto';
 import { WithGuard } from '../shared/with-guard.decorator';
+import { WithValidation } from '../shared/with-validation.decorator';
 import { CreateUserDto, UpdateUserDto, UserDto } from './user.dto';
 import { UserService } from './user.service';
 
@@ -46,9 +47,6 @@ export class UserController {
     summary: 'Get details of one user',
     operationId: 'getUser',
   })
-  @ApiOkResponse({
-    type: UserDto,
-  })
   @Get(':id')
   getUser(@Param('id') id: string): Promise<UserDto> {
     return this.userService.getOne(id);
@@ -58,9 +56,7 @@ export class UserController {
     summary: 'Create a user',
     operationId: 'createUser',
   })
-  @ApiOkResponse({
-    type: UserDto,
-  })
+  @WithValidation()
   @Post()
   createUser(@Body() body: CreateUserDto): Promise<UserDto> {
     return this.userService.create(body);
@@ -70,9 +66,7 @@ export class UserController {
     summary: 'Update a user',
     operationId: 'updateUser',
   })
-  @ApiOkResponse({
-    type: UserDto,
-  })
+  @WithValidation()
   @Patch(':id')
   updateUser(
     @Param('id') id: string,
@@ -85,11 +79,8 @@ export class UserController {
     summary: 'Delete a user',
     operationId: 'deleteUser',
   })
-  @ApiOkResponse({
-    type: UserDto,
-  })
   @Delete(':id')
-  deleteUser(@Param('id') id: string) {
+  deleteUser(@Param('id') id: string): Promise<UserDto> {
     return this.userService.deleteOne(id);
   }
 }
