@@ -45,8 +45,9 @@ export class CreateProductDto implements Omit<Product, 'comments'> {
   price: string;
 
   @ApiProperty({
-    required: false,
     type: 'string',
+    isArray: true,
+    required: false,
     description: '_id of related products',
   })
   @IsMongoId({
