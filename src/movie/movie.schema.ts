@@ -1,5 +1,7 @@
 import { Schema } from 'mongoose';
-import { Movie, MovieComment, MOVIE_SCHEMA } from './movie.type';
+import paginate from 'mongoose-paginate-v2';
+
+import { MOVIE_SCHEMA, Movie, MovieComment } from './movie.type';
 
 export const MovieSchema = new Schema<Movie>(
   {
@@ -15,6 +17,8 @@ export const MovieSchema = new Schema<Movie>(
     timestamps: true,
   }
 );
+
+MovieSchema.plugin(paginate);
 
 export const MovieCommentSchema = new Schema<MovieComment>(
   {

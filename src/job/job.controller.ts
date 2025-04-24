@@ -8,7 +8,14 @@ import {
   Post,
   Query,
 } from '@nestjs/common';
-import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
+import {
+  ApiOkResponse,
+  ApiOperation,
+  ApiQuery,
+  ApiTags,
+} from '@nestjs/swagger';
+import { omitBy } from 'lodash';
+import type { FilterQuery } from 'mongoose';
 
 import {
   ApiPaginatedResponse,
@@ -18,6 +25,7 @@ import { PaginatedDto } from '../shared/pagination.dto';
 import { WithValidation } from '../shared/with-validation.decorator';
 import { JobDto, JobResponseDto, UpdateJobDto } from './job.dto';
 import { JobService } from './job.service';
+import { type JobDocument, type JobLevel, JobLevelEnum } from './job.type';
 
 @ApiTags('job')
 @Controller('job')
@@ -54,16 +62,80 @@ export class JobController {
     operationId: 'listJobs',
   })
   @Pagination()
+  @ApiQuery({
+    name: 'title',
+    required: false,
+    type: 'string',
+  })
+  @ApiQuery({
+    name: 'level',
+    required: false,
+    type: 'string',
+    enum: JobLevelEnum,
+  })
+  @ApiQuery({
+    name: 'search',
+    required: false,
+    type: 'string',
+    description:
+      'Search for jobs by title, level, department, summary, or description',
+  })
   @ApiPaginatedResponse(JobResponseDto)
   @Get('list')
   listJobs(
     @Query('page') page?: number,
-    @Query('limit') limit?: number
+    @Query('limit') limit?: number,
+    @Query('title') title?: string,
+    @Query('level') level?: JobLevel,
+    @Query('search') search?: string
   ): Promise<PaginatedDto<JobResponseDto>> {
     return this.jobService.getManyPaginated({
       page,
       limit,
+      query: this.constructSearchQuery({
+        title: title?.trim(),
+        level: level?.trim() as JobLevel,
+        search: search?.trim(),
+      }),
     });
+  }
+
+  private constructSearchQuery(filters: {
+    title?: string;
+    level?: JobLevel;
+    search?: string;
+  }): FilterQuery<JobDocument> {
+    if (filters.search) {
+      const searchTerm = filters.search.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      const searchRegex = new RegExp(searchTerm, 'i');
+
+      return {
+        $or: [
+          { title: { $regex: searchRegex } },
+          { level: { $regex: searchRegex } },
+          { department: { $regex: searchRegex } },
+          { summary: { $regex: searchRegex } },
+          { descriptions: { $elemMatch: { $regex: searchRegex } } },
+          { requirements: { $elemMatch: { $regex: searchRegex } } },
+        ],
+      };
+    }
+
+    const sanitizedTitle = filters.title
+      ? filters.title.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+      : undefined;
+
+    return omitBy(
+      {
+        title: sanitizedTitle && {
+          $regex: new RegExp(sanitizedTitle, 'i'),
+        },
+        level: filters.level && {
+          $eq: filters.level,
+        },
+      },
+      (x) => !x
+    );
   }
 
   @ApiOperation({

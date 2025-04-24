@@ -1,6 +1,5 @@
 import { ConflictException, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { omit } from 'lodash';
 
 import { CreateUserDto } from '../user/user.dto';
 import { UserService } from '../user/user.service';
@@ -14,8 +13,9 @@ export class AuthService {
   ) {}
 
   async createUser(user: CreateUserDto) {
-    const currentUser = await this.userService.findOne(user.email);
-    if (currentUser) {
+    const emailIsUsed = await this.userService.getIsEmailUsed(user.email);
+
+    if (emailIsUsed) {
       throw new ConflictException({
         message: ['Email already used.'],
       });
@@ -25,10 +25,10 @@ export class AuthService {
   }
 
   async validateUser(email: string, password: string) {
-    const user = await this.userService.findOne(email);
+    const user = await this.userService.validateCredentials(email, password);
 
-    if (user && user.password === password) {
-      return omit(user.toObject(), ['password']);
+    if (user) {
+      return user;
     }
 
     return null;

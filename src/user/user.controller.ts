@@ -8,7 +8,7 @@ import {
   Post,
   Query,
 } from '@nestjs/common';
-import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger';
 
 import {
   ApiPaginatedResponse,
@@ -31,15 +31,33 @@ export class UserController {
     operationId: 'listUsers',
   })
   @Pagination()
+  @ApiQuery({
+    name: 'search',
+    required: false,
+    type: 'string',
+    description: 'Search for users by name or email',
+  })
   @ApiPaginatedResponse(UserDto)
   @Get()
   listUsers(
     @Query('page') page?: number,
-    @Query('limit') limit?: number
+    @Query('limit') limit?: number,
+    @Query('search') search?: string
   ): Promise<PaginatedDto<UserDto>> {
+    const searchTerm = search?.trim().replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const searchRegex = new RegExp(searchTerm, 'i');
+
     return this.userService.getManyPaginated({
       page,
       limit,
+      query: searchTerm
+        ? {
+            $or: [
+              { name: { $regex: searchRegex } },
+              { email: { $regex: searchRegex } },
+            ],
+          }
+        : undefined,
     });
   }
 

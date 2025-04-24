@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import type { Model, PaginateModel } from 'mongoose';
+import type { FilterQuery, Model, PaginateModel } from 'mongoose';
 
 import { CreateJobApplicationDto } from './job.dto';
 import {
@@ -62,20 +62,19 @@ export class JobService {
   getManyPaginated({
     page = 1,
     limit = 10,
+    query = {},
   }: {
     page?: number;
     limit?: number | string;
+    query?: FilterQuery<JobDocument>;
   } = {}) {
-    return this.jobModel.paginate(
-      {},
-      {
-        sort: {
-          createdAt: -1,
-        },
-        limit: Number(limit),
-        page: Number(page),
-      }
-    );
+    return this.jobModel.paginate(query, {
+      sort: {
+        createdAt: -1,
+      },
+      limit: Number(limit),
+      page: Number(page),
+    });
   }
 
   updateOne(id: string, changes: Partial<Job>) {
