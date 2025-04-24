@@ -1,17 +1,17 @@
 import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
-import { zip } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { type FilterQuery, Model, PaginateModel } from 'mongoose';
+import { firstValueFrom, map, zip } from 'rxjs';
+
 import { CreateMovieCommentDto } from './movie.dto';
 import {
   ApiMovie,
+  MOVIE_COMMENT_SCHEMA,
+  MOVIE_SCHEMA,
   Movie,
   MovieCommentDocument,
   MovieDocument,
-  MOVIE_COMMENT_SCHEMA,
-  MOVIE_SCHEMA,
 } from './movie.type';
 
 @Injectable()
@@ -19,7 +19,7 @@ export class MovieService {
   private hasData: undefined | boolean;
 
   constructor(
-    @InjectModel(MOVIE_SCHEMA) private movieModel: Model<MovieDocument>,
+    @InjectModel(MOVIE_SCHEMA) private movieModel: PaginateModel<MovieDocument>,
     @InjectModel(MOVIE_COMMENT_SCHEMA)
     private movieCommentModel: Model<MovieCommentDocument>,
     private http: HttpService
@@ -34,42 +34,7 @@ export class MovieService {
     before?: string;
     limit?: number | string;
   } = {}) {
-    if (typeof this.hasData === 'undefined') {
-      const doc = await this.movieModel.findOne().exec();
-      if (doc) {
-        this.hasData = true;
-      } else {
-        this.hasData = false;
-      }
-    }
-
-    if (!this.hasData) {
-      const movies = await zip(this.getConfig(), this.collectMovies())
-        .pipe(
-          map(([{ images }, movies]) => {
-            const imageBaseUrl = `${images.secure_base_url}${
-              images.poster_sizes[images.poster_sizes.length - 2]
-            }`;
-            const thumbnailBaseUrl = `${images.secure_base_url}${images.poster_sizes[0]}`;
-
-            return movies.map(
-              (movie): Movie => ({
-                adult: movie.adult,
-                overview: movie.overview,
-                title: movie.title,
-                originalTitle: movie.original_title,
-                releaseDate: movie.release_date,
-                posterUrl: `${imageBaseUrl}${movie.poster_path}`,
-                thumbnailUrl: `${thumbnailBaseUrl}${movie.poster_path}`,
-                backdropUrl: `${imageBaseUrl}${movie.backdrop_path}`,
-              })
-            );
-          })
-        )
-        .toPromise();
-
-      await this.movieModel.create(...movies);
-    }
+    await this.ensureDataExists();
 
     const limitValue = Number(limit);
 
@@ -92,6 +57,26 @@ export class MovieService {
         }
       )
       .exec();
+  }
+
+  async getMoviesPaginated({
+    page = 1,
+    limit = 10,
+    query = {},
+  }: {
+    page?: number | string;
+    limit?: number | string;
+    query?: FilterQuery<MovieDocument>;
+  }) {
+    await this.ensureDataExists();
+
+    return this.movieModel.paginate(query, {
+      sort: {
+        createdAt: -1,
+      },
+      limit: Number(limit),
+      page: Number(page),
+    });
   }
 
   getOne(id: string) {
@@ -133,6 +118,45 @@ export class MovieService {
         userId,
       })
       .exec();
+  }
+
+  private async ensureDataExists() {
+    if (this.hasData == null) {
+      const doc = await this.movieModel.findOne().exec();
+      if (doc) {
+        this.hasData = true;
+      } else {
+        this.hasData = false;
+      }
+    }
+
+    if (!this.hasData) {
+      const movies = await firstValueFrom(
+        zip(this.getConfig(), this.collectMovies()).pipe(
+          map(([{ images }, movies]) => {
+            const imageBaseUrl = `${images.secure_base_url}${
+              images.poster_sizes[images.poster_sizes.length - 2]
+            }`;
+            const thumbnailBaseUrl = `${images.secure_base_url}${images.poster_sizes[0]}`;
+
+            return movies.map(
+              (movie): Movie => ({
+                adult: movie.adult,
+                overview: movie.overview,
+                title: movie.title,
+                originalTitle: movie.original_title,
+                releaseDate: movie.release_date,
+                posterUrl: `${imageBaseUrl}${movie.poster_path}`,
+                thumbnailUrl: `${thumbnailBaseUrl}${movie.poster_path}`,
+                backdropUrl: `${imageBaseUrl}${movie.backdrop_path}`,
+              })
+            );
+          })
+        )
+      );
+
+      await this.movieModel.create(...movies);
+    }
   }
 
   private collectMovies() {

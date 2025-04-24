@@ -10,8 +10,14 @@ export type UserData = {
   _id: string;
 };
 
+export type UserModelMethods = {
+  validatePassword(candidatePassword: string): Promise<boolean>;
+};
+
 export type UserPublicDetails = Pick<UserData, 'name' | 'avatar'> & {
   _id: string;
 };
 
-export type UserDocument = UserData & Document<string, unknown, UserData>;
+export type UserDocument = UserData &
+  UserModelMethods &
+  Document<string, unknown, UserData>;

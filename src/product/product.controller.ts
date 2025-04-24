@@ -17,6 +17,8 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
+import { omitBy } from 'lodash';
+import type { FilterQuery } from 'mongoose';
 
 import {
   ApiPaginatedResponse,
@@ -31,6 +33,7 @@ import {
   UpdateProductDto,
 } from './product.dto';
 import { ProductService } from './product.service';
+import type { ProductDocument } from './product.type';
 
 @ApiTags('product')
 @Controller('product')
@@ -70,16 +73,76 @@ export class ProductController {
     operationId: 'listProducts',
   })
   @Pagination()
+  @ApiQuery({
+    name: 'name',
+    required: false,
+    type: 'string',
+  })
+  @ApiQuery({
+    name: 'department',
+    required: false,
+    type: 'string',
+  })
+  @ApiQuery({
+    name: 'search',
+    required: false,
+    type: 'string',
+    description: 'Search for products by name, department, or description',
+  })
   @ApiPaginatedResponse(ProductResponse)
   @Get('list')
   listProducts(
     @Query('page') page?: number,
-    @Query('limit') limit?: number
+    @Query('limit') limit?: number,
+    @Query('name') name?: string,
+    @Query('department') department?: string,
+    @Query('search') search?: string
   ): Promise<PaginatedDto<ProductResponse>> {
     return this.productService.getManyPaginated({
       page,
       limit,
+      query: this.constructSearchQuery({
+        name: name?.trim(),
+        department: department?.trim(),
+        search: search?.trim(),
+      }),
     });
+  }
+
+  private constructSearchQuery(filters: {
+    name?: string;
+    department?: string;
+    search?: string;
+  }): FilterQuery<ProductDocument> {
+    if (filters.search) {
+      const searchTerm = filters.search.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      const searchRegex = new RegExp(searchTerm, 'i');
+
+      return {
+        $or: [
+          { name: { $regex: searchRegex } },
+          { department: { $regex: searchRegex } },
+          { descriptions: { $elemMatch: { $regex: searchRegex } } },
+        ],
+      };
+    }
+
+    // Sanitize the name parameter to prevent regex injection
+    const sanitizedName = filters.name
+      ? filters.name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+      : undefined;
+
+    return omitBy(
+      {
+        name: sanitizedName && {
+          $regex: new RegExp(sanitizedName, 'i'),
+        },
+        department: filters.department && {
+          $eq: filters.department,
+        },
+      },
+      (x) => !x
+    );
   }
 
   @ApiOperation({

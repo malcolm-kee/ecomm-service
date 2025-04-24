@@ -1,12 +1,14 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsMongoId, IsNumber, IsString, Max, Min } from 'class-validator';
+
 import { Movie } from './movie.type';
 
 export class MovieDto implements Movie {
   @ApiProperty({
-    title: 'The Last Mercenary',
+    example: 'The Last Mercenary',
   })
   title: string;
+
   @ApiProperty({
     description: 'Original title',
     example: 'Le Dernier Mercenaire',
@@ -21,6 +23,11 @@ export class MovieDto implements Movie {
   thumbnailUrl: string;
   backdropUrl: string;
   adult: boolean;
+
+  @ApiProperty({
+    description: 'Overview',
+    example: 'A movie about a mercenary',
+  })
   overview: string;
 }
 

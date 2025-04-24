@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { PaginateModel } from 'mongoose';
+import { type FilterQuery, PaginateModel } from 'mongoose';
 
 import { CreateProductDto } from './product.dto';
 import {
@@ -75,20 +75,19 @@ export class ProductService {
   getManyPaginated({
     page = 1,
     limit = 10,
+    query = {},
   }: {
     page?: number | string;
     limit?: number | string;
+    query?: FilterQuery<ProductDocument>;
   } = {}) {
-    return this.productModel.paginate(
-      {},
-      {
-        sort: {
-          createdAt: -1,
-        },
-        limit: Number(limit),
-        page: Number(page),
-      }
-    );
+    return this.productModel.paginate(query, {
+      sort: {
+        createdAt: -1,
+      },
+      limit: Number(limit),
+      page: Number(page),
+    });
   }
 
   deleteOne(id: string) {

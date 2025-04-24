@@ -11,12 +11,17 @@ import {
 import {
   ApiOkResponse,
   ApiOperation,
+  ApiQuery,
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
 
 import { User } from '../auth';
-import { Pagination } from '../shared/pagination.decorator';
+import {
+  ApiPaginatedResponse,
+  Pagination,
+} from '../shared/pagination.decorator';
+import { PaginatedDto } from '../shared/pagination.dto';
 import { WithGuard } from '../shared/with-guard.decorator';
 import { CreateMovieCommentDto, MovieCommentDto, MovieDto } from './movie.dto';
 import { MovieService } from './movie.service';
@@ -28,7 +33,7 @@ export class MovieController {
 
   @ApiOperation({
     summary: 'Get list of movies',
-    operationId: 'listMovies',
+    operationId: 'getMovies',
   })
   @ApiOkResponse({
     type: MovieDto,
@@ -43,6 +48,42 @@ export class MovieController {
     return this.movieService.getMovies({
       page,
       limit,
+    });
+  }
+
+  @ApiOperation({
+    summary: 'List movies with pagination',
+    operationId: 'listMovies',
+  })
+  @Pagination()
+  @ApiQuery({
+    name: 'search',
+    required: false,
+    type: 'string',
+    description: 'Search for movies by title or description',
+  })
+  @ApiPaginatedResponse(MovieDto)
+  @Get('list')
+  listMovies(
+    @Query('page') page?: number,
+    @Query('limit') limit?: number,
+    @Query('search') search?: string
+  ): Promise<PaginatedDto<MovieDto>> {
+    const searchTerm = search?.trim().replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const searchRegex = new RegExp(searchTerm, 'i');
+
+    return this.movieService.getMoviesPaginated({
+      page,
+      limit,
+      query: searchTerm
+        ? {
+            $or: [
+              { title: { $regex: searchRegex } },
+              { originalTitle: { $regex: searchRegex } },
+              { overview: { $regex: searchRegex } },
+            ],
+          }
+        : undefined,
     });
   }
 
