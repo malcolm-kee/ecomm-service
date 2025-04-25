@@ -1,4 +1,4 @@
-import { ApiProperty, PartialType, OmitType } from '@nestjs/swagger';
+import { ApiProperty, OmitType, PartialType } from '@nestjs/swagger';
 import {
   IsEmail,
   IsNotEmpty,
@@ -29,7 +29,9 @@ export class UserDto implements Omit<UserData, 'password'> {
   email: string;
 
   @IsString()
-  @IsUrl()
+  @IsUrl({
+    require_tld: false, // allow localhost for testing
+  })
   @ApiProperty({
     example: 'https://github.com/malcolm-kee.png',
   })
