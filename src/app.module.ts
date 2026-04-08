@@ -31,6 +31,7 @@ import { UserModule } from './user/user.module';
             dbName: 'ecomm-service',
             port: 37813,
             storageEngine: 'wiredTiger',
+            launchTimeout: 30_000,
           },
         });
         return {
